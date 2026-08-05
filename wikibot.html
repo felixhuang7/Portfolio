@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>WikiBot · 企业知识库问答与经验管理平台 | 作品展示</title>
+<meta name="description" content="WikiBot：多机器人企业知识库问答 + 经验管理平台。飞书长连接接入，大模型摄取文档为结构化 Wiki，LLM 选页 + 向量检索双路定位，带 [[来源]] 标注的流式回答。">
+<link rel="stylesheet" href="assets/css/style.css">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%232563EB'/%3E%3Ctext x='16' y='22' font-size='16' font-weight='900' fill='white' text-anchor='middle' font-family='sans-serif'%3EW%3C/text%3E%3C/svg%3E">
+</head>
+<body>
+
+<!-- ============ 顶部导航 ============ -->
+<nav class="nav">
+  <div class="wrap">
+    <a class="brand" href="index.html">
+      <span class="logo">W</span>
+      <span>WikiBot</span>
+    </a>
+    <ul>
+      <li><a href="#overview">项目概览</a></li>
+      <li><a href="#features">核心能力</a></li>
+      <li><a href="#output">问答输出</a></li>
+      <li><a href="#screens">页面展示</a></li>
+      <li><a href="#architecture">双路检索</a></li>
+      <li><a href="#experience">经验管理</a></li>
+      <li><a href="#highlights">线上实跑</a></li>
+      <li><a href="#stack">技术栈</a></li>
+    </ul>
+    <a class="nav-cta nav-back" href="index.html">← 返回作品集</a>
+  </div>
+</nav>
+
+<!-- ============ Hero ============ -->
+<header class="hero" id="top">
+  <div class="wrap hero-grid">
+    <div>
+      <h1>把团队的文档与经验，<br><span class="grad">变成会回答问题的机器人</span></h1>
+      <p class="lead">
+        WikiBot 是多机器人企业知识库问答 + 经验管理平台。管理员把 GitLab 仓库导入各自 Group，系统用大模型把原始文档摄取为结构化 Wiki 页面；用户提问时由 <strong>LLM 选页 + 向量检索双路</strong>定位知识，生成<strong>带来源标注</strong>的流式回答。
+      </p>
+      <div class="cta-row">
+        <a class="btn btn-primary" href="#screens">↓ 浏览系统截图</a>
+        <a class="btn btn-ghost" href="#architecture">查看双路检索架构</a>
+      </div>
+      <div class="stat-row">
+        <div class="stat"><b>54 → 3.4万</b><span>仓库 → wiki 页</span></div>
+        <div class="stat"><b>19.2万</b><span>向量化段落</span></div>
+        <div class="stat"><b>1800+</b><span>真实提问</span></div>
+        <div class="stat"><b>双路</b><span>LLM 主 + 向量辅</span></div>
+      </div>
+    </div>
+
+    <!-- 右侧：飞书问答预览卡 -->
+    <div class="hero-card" aria-hidden="true">
+      <div class="hc-bar">
+        <span class="hc-dot" style="background:#FF5F57"></span>
+        <span class="hc-dot" style="background:#FEBC2E"></span>
+        <span class="hc-dot" style="background:#28C840"></span>
+        <span style="margin-left:8px;color:var(--muted);font-size:12.5px">飞书机器人</span>
+      </div>
+      <div class="hc-body">
+        <div class="msg">
+          <div class="av user">张</div>
+          <div class="bubble">产品发布流程里，灰度发布的准入条件是什么？</div>
+        </div>
+        <div class="msg">
+          <div class="av bot">W</div>
+          <div class="bubble bot">
+            灰度发布的准入条件包括：① 核心指标（成功率、延迟 P95）连续 2 小时达标；② 通过安全评审并签署发布单；③ 回滚预案已就绪。<span class="cite">（来源：<span class="cite-link">产品发布流程</span>）</span>
+            <div class="src">
+              <span class="src-label">📎 <strong>参考来源</strong>：</span><a class="src-link" href="javascript:void(0)">产品发布流程.md</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- ============ 项目概览 ============ -->
+<section id="overview">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="kicker">项目概览</div>
+      <h2>一个平台，两套知识库</h2>
+      <p>WikiBot 围绕「文档」与「经验」两条知识线，把分散在 GitLab 的非结构化内容沉淀为可检索、可追溯的 AI 问答能力，每个 Group 对接一个独立飞书机器人。</p>
+    </div>
+    <div class="feat-grid">
+      <div class="feat wide">
+        <div class="ico">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16v6a8 8 0 0 1-16 0V4z"/><path d="M8 20h8M12 16v4"/></svg>
+        </div>
+        <h3>Wiki 模式 · 文档密集型问答</h3>
+        <p>原始 .md / PDF / DOCX / PPTX / XLSX 文档经 AI 拆解重组为多类知识页面：源摘要、实体页、概念页、分析页，并生成总索引与综述。示例：16 份原始文件 → 126 个 wiki 页面。</p>
+      </div>
+      <div class="feat wide">
+        <div class="ico" style="background:#FFFBEB;color:#D97706">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 7h18M3 12h18M3 17h12"/></svg>
+        </div>
+        <h3>经验模式 · 工程经验沉淀</h3>
+        <p>从 GitLab commit 历史中自动扫描提取结构化经验（决策规则 + 踩坑教训），经人工审查确认后入库，飞书机器人可直接查询复用，避免重复踩坑。</p>
+      </div>
+      <div class="feat">
+        <div class="ico" style="background:#ECFDF5;color:#059669">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20z"/><path d="M7 12h2l2 3 4-6"/></svg>
+        </div>
+        <h3>飞书长连接接入</h3>
+        <p>WebSocket 长连接（lark-oapi），服务器主动连接飞书，无需公网域名与 Webhook 回调，部署门槛极低。</p>
+      </div>
+      <div class="feat">
+        <div class="ico" style="background:#F5F3FF;color:#7C3AED">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 3v18M18 3v18M3 6h18M3 18h18"/></svg>
+        </div>
+        <h3>LLM + 向量 双路检索</h3>
+        <p>主路径：LLM 读 wiki/index.md 做页面级语义选页（高置信）；辅路径：pgvector dense+sparse 做段落级召回（补充）。三桶合并，互不截断。</p>
+      </div>
+      <div class="feat">
+        <div class="ico" style="background:#FEF2F2;color:#DC2626">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16v12H4z"/><path d="M2 20h20M9 8l6 4-6 4z"/></svg>
+        </div>
+        <h3>来源可追溯</h3>
+        <p>回答内联 [[页面标题]] wiki 链接，底部附「📎 参考来源」可跳转源文件；AI 延展分析明确标注「非知识库原文」。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 核心能力 ============ -->
+<section id="features" style="background:#fff">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="kicker">核心能力</div>
+      <h2>从文档摄取到飞书/前端问答的完整闭环</h2>
+      <p>覆盖文档导入、知识摄取、检索增强、人工审查、运营监控的端到端能力。</p>
+    </div>
+    <div class="feat-grid">
+      <div class="feat">
+        <div class="ico"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg></div>
+        <h3>GitLab 文档一键导入</h3>
+        <p>登记 GitLab 仓库后自动 clone，支持 PDF / DOCX / PPTX / XLSX / MD 多格式解析入库。</p>
+      </div>
+      <div class="feat">
+        <div class="ico"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2 2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5M2 12l10 5 10-5"/></svg></div>
+        <h3>AI 摄取为结构化页面</h3>
+        <p>Claude 将原始文档拆解重组为源摘要、实体页、概念页、分析页，并维护总索引与综述。</p>
+      </div>
+      <div class="feat">
+        <div class="ico"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg></div>
+        <h3>多轮对话与意图识别</h3>
+        <p>区分知识查询 / 闲聊 / 偏题意图，支持多轮上下文与查询改写、宽泛问题自动扩展。</p>
+      </div>
+      <div class="feat">
+        <div class="ico"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 7h16M4 12h10M4 17h7"/></svg></div>
+        <h3>AI 介入程度可调</h3>
+        <p>每个 Group 可设关 / 低 / 中 / 高四档，控制是否在回答末尾追加 AI 延展分析小节。</p>
+      </div>
+      <div class="feat">
+        <div class="ico"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></div>
+        <h3>用户与权限管理</h3>
+        <p>以飞书 union_id 为主键，全局管理员、Group 成员分级管理，OAuth 登录一键接入。</p>
+      </div>
+      <div class="feat">
+        <div class="ico"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2l8 4v6c0 5-3.5 8-8 10-4.5-2-8-5-8-10V6l8-4z"/><path d="M9 12l2 2 4-4"/></svg></div>
+        <h3>密级控制</h3>
+        <p>按文件夹路径前缀映射 public / confidential 密级，检索层按用户 clearance 过滤越权页，配置变更秒级重标注不调 LLM。</p>
+      </div>
+      <div class="feat">
+        <div class="ico"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3v18h18"/><path d="M7 14l3-4 3 3 5-6"/></svg></div>
+        <h3>运营指标看板</h3>
+        <p>查询量、Top1 命中分、回退率、改写率、延迟 P50/P95、意图分布，量化问答质量。</p>
+      </div>
+      <div class="feat">
+        <div class="ico"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 8v4l3 2"/><circle cx="12" cy="12" r="9"/></svg></div>
+        <h3>系统日志与反馈</h3>
+        <p>全链路日志检索与用户反馈汇总，定位问题、回收标注、持续优化知识库。</p>
+      </div>
+      <div class="feat">
+        <div class="ico"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 3v18M3 9h6"/></svg></div>
+        <h3>模块开关配置</h3>
+        <p>选页、改写、意图、向量、sparse、精排、AI 分析等模块按 Group 独立开关，配置持久化、即时生效。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 问答输出 ============ -->
+<section id="output">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="kicker">问答输出</div>
+      <h2>图文图表混排，不止是纯文本</h2>
+      <p>回答不只有文字——还能<strong>内嵌图片</strong>，并用<strong>图表</strong>呈现流程、时序、柱状、折线、饼图，支持缩放与全屏查看；飞书卡片同步显示图片。</p>
+    </div>
+    <div class="out-grid">
+      <div class="out">
+        <div class="out-vis">
+          <svg viewBox="0 0 200 120" class="out-svg">
+            <rect x="28" y="18" width="144" height="84" rx="12" fill="#fff" stroke="#DBEAFE" stroke-width="2"/>
+            <path d="M28 102 Q64 54 104 80 T172 78 L172 102 Z" fill="#BFDBFE"/>
+            <path d="M28 102 Q58 70 100 88 T172 88 L172 102 Z" fill="#2563EB"/>
+            <circle cx="58" cy="44" r="9" fill="#FBBF24"/>
+            <rect x="148" y="28" width="18" height="14" rx="4" fill="#EFF6FF" stroke="#93C5FD" stroke-width="1"/>
+            <circle cx="157" cy="33.5" r="2" fill="#FBBF24"/>
+            <path d="M152 39 q2.5 2 5 0 t5 0" fill="none" stroke="#60A5FA" stroke-width="1.2" stroke-linecap="round"/>
+          </svg>
+          <span class="out-zoom">🔍 点击放大</span>
+        </div>
+        <h4>内嵌图片</h4>
+        <p>回答里直接显示文档原图，点击可放大细看；飞书卡片同步呈现图片，所见即所得。</p>
+      </div>
+
+      <div class="out">
+        <div class="out-vis">
+          <svg viewBox="0 0 200 120" class="out-svg">
+            <defs><marker id="fa" markerWidth="7" markerHeight="7" refX="5.5" refY="3" orient="auto"><path d="M0 0 L6 3 L0 6 Z" fill="#2563EB"/></marker></defs>
+            <rect x="64" y="4" width="72" height="22" rx="6" fill="#fff" stroke="#2563EB" stroke-width="1.5"/>
+            <text x="100" y="19" font-size="9.5" fill="#1E293B" text-anchor="middle" font-family="sans-serif">用户提问</text>
+            <path d="M100 27 L100 33" stroke="#2563EB" stroke-width="1.5" marker-end="url(#fa)"/>
+            <rect x="64" y="34" width="72" height="22" rx="6" fill="#EFF6FF" stroke="#2563EB" stroke-width="1.5"/>
+            <text x="100" y="49" font-size="9.5" fill="#1E293B" text-anchor="middle" font-family="sans-serif">选页与检索</text>
+            <path d="M100 57 L100 63" stroke="#2563EB" stroke-width="1.5" marker-end="url(#fa)"/>
+            <rect x="64" y="64" width="72" height="22" rx="6" fill="#DBEAFE" stroke="#2563EB" stroke-width="1.5"/>
+            <text x="100" y="79" font-size="9.5" fill="#1D4ED8" text-anchor="middle" font-family="sans-serif">流式生成</text>
+            <path d="M100 87 L100 93" stroke="#2563EB" stroke-width="1.5" marker-end="url(#fa)"/>
+            <rect x="64" y="94" width="72" height="22" rx="11" fill="#2563EB"/>
+            <text x="100" y="109" font-size="9.5" fill="#fff" text-anchor="middle" font-family="sans-serif">📎来源展示</text>
+          </svg>
+        </div>
+        <h4>流程图 / 时序图</h4>
+        <p>用流程图讲清步骤与分支判断，用时序图展示多角色交互；自动生成、可缩放全屏查看。</p>
+      </div>
+
+      <div class="out">
+        <div class="out-vis">
+          <svg viewBox="0 0 200 120" class="out-svg">
+            <line x1="16" y1="100" x2="184" y2="100" stroke="#94A3B8" stroke-width="1.5"/>
+            <line x1="16" y1="16" x2="16" y2="100" stroke="#94A3B8" stroke-width="1.5"/>
+            <rect x="30" y="70" width="22" height="30" rx="2" fill="#2563EB"/>
+            <rect x="62" y="52" width="22" height="48" rx="2" fill="#3B82F6"/>
+            <rect x="94" y="36" width="22" height="64" rx="2" fill="#60A5FA"/>
+            <rect x="126" y="60" width="22" height="40" rx="2" fill="#93C5FD"/>
+            <rect x="158" y="44" width="22" height="56" rx="2" fill="#BFDBFE"/>
+            <text x="40" y="115" font-size="8" fill="#64748B" text-anchor="middle" font-family="sans-serif">Q1</text>
+            <text x="72" y="115" font-size="8" fill="#64748B" text-anchor="middle" font-family="sans-serif">Q2</text>
+            <text x="104" y="115" font-size="8" fill="#64748B" text-anchor="middle" font-family="sans-serif">Q3</text>
+            <text x="136" y="115" font-size="8" fill="#64748B" text-anchor="middle" font-family="sans-serif">Q4</text>
+            <text x="168" y="115" font-size="8" fill="#64748B" text-anchor="middle" font-family="sans-serif">Q5</text>
+          </svg>
+        </div>
+        <h4>柱状图 / 折线图</h4>
+        <p>指标趋势、对比分布用柱状图或折线图一图说清，自带坐标轴，数量关系一目了然。</p>
+      </div>
+
+      <div class="out">
+        <div class="out-vis">
+          <svg viewBox="0 0 200 120" class="out-svg">
+            <path d="M100 60 L100 18 A42 42 0 0 1 105.3 101.7 Z" fill="#1D4ED8"/>
+            <path d="M100 60 L105.3 101.7 A42 42 0 0 1 58.1 62.6 Z" fill="#3B82F6"/>
+            <path d="M100 60 L58.1 62.6 A42 42 0 0 1 100 18 Z" fill="#60A5FA"/>
+            <circle cx="100" cy="60" r="42" fill="none" stroke="#E2E8F0" stroke-width="1.5"/>
+            <text x="124" y="59" font-size="11" fill="#fff" text-anchor="middle" dominant-baseline="middle" font-family="sans-serif" font-weight="700">48%</text>
+            <text x="85" y="79" font-size="9.5" fill="#fff" text-anchor="middle" dominant-baseline="middle" font-family="sans-serif" font-weight="600">26%</text>
+            <text x="83" y="44" font-size="9.5" fill="#1E293B" text-anchor="middle" dominant-baseline="middle" font-family="sans-serif" font-weight="600">26%</text>
+          </svg>
+        </div>
+        <h4>饼图</h4>
+        <p>分类占比、来源分布用饼图直观呈现，整体构成一眼看清。</p>
+      </div>
+    </div>
+    <div class="out-note">
+      <span class="out-chip">Web 端</span> 图片 + 流程图 + 时序图 + 柱状/折线 + 饼图，可缩放、全屏查看
+      <span class="out-chip" style="margin-left:14px">飞书端</span> 支持回答内嵌图片
+    </div>
+  </div>
+</section>
+
+<!-- ============ 页面展示（截图） ============ -->
+<section id="screens" style="background:var(--bg)">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="kicker">页面展示</div>
+      <h2>系统页面截图</h2>
+      <p>截图取自本地 WikiBot 系统，相关数据已脱敏，点击任意截图可放大查看。</p>
+    </div>
+    <div class="gallery" id="gallery"><!-- JS 动态填充 --></div>
+  </div>
+</section>
+
+<!-- ============ 技术架构 ============ -->
+<section id="architecture" class="arch">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="kicker">双路检索</div>
+      <h2>LLM wiki + RAG 双路检索（LLM wiki 为主）</h2>
+      <p>WikiBot 的查询是<strong style="color:#fff">两路径并行</strong>结构，不是单一向量线性流程：主路径让大模型读 <code style="background:rgba(255,255,255,.08);color:#DBEAFE">wiki/index.md</code> 做页面级语义选页（置信度高，决定“读哪些页”）；辅路径在 pgvector 上做段落级 dense/sparse 检索（置信度低，作补充）。两路结果按三桶合并，决定页面优先级与内容读取策略，最后一次性流式生成。</p>
+    </div>
+
+    <div class="flow">
+      <div class="step"><span class="n">1</span><h4>意图检测 + 查询改写</h4><p>Claude 单次调用输出 JSON：代词消解、时间词展开、口语规范化；意图三态（查询 / 问候 / 偏题），问候与偏题跳过检索。</p></div>
+      <div class="step"><span class="n">2</span><h4>LLM 选页（主路径）</h4><p>把 index.md 全文交 Claude 做页面级语义判断，行号方案输出 ids 还原路径；精准查询严格筛、汇总查询宁可多选。高置信。</p></div>
+      <div class="step"><span class="n">3</span><h4>向量检索（辅路径）</h4><p>index 向量预筛 ~1ms 选页面，pgvector HNSW 做 dense + sparse RRF（k=60）段落级召回；keyword_path 结构化路径经第二层 RRF 融合。</p></div>
+      <div class="step"><span class="n">4</span><h4>三桶合并 + 分级读取</h4><p>b1 双命中读整页 / b2 仅 LLM 读整页 / b3 仅向量 chunk-first；跨页段落去重，超预算等比压缩，不丢弃任何页面。</p></div>
+      <div class="step"><span class="n">5</span><h4>流式生成 + 来源</h4><p>Claude 流式生成，内联 [[wikilink]] 注明来源，底部附「📎 参考来源」可跳源文件；可选 AI 分析小节明确标注非原文。</p></div>
+    </div>
+
+    <div class="arch-stack">
+      <div class="layer">
+        <h5>● 接入层</h5>
+        <div class="items"><span>飞书 lark-oapi</span><span>WebSocket 长连接</span><span>OAuth 2.0</span></div>
+      </div>
+      <div class="layer">
+        <h5>● 应用层</h5>
+        <div class="items"><span>FastAPI</span><span>asyncio</span><span>JWT</span><span>后台任务</span></div>
+      </div>
+      <div class="layer">
+        <h5>● 大模型层</h5>
+        <div class="items"><span>Claude</span><span>DeepSeek</span><span>GLM</span><span>LiteLLM</span></div>
+      </div>
+      <div class="layer">
+        <h5>● 检索模型层</h5>
+        <div class="items"><span>BGE-M3 dense</span><span>BGE-M3 sparse</span><span>BGE-Reranker（可选）</span></div>
+      </div>
+      <div class="layer">
+        <h5>● 存储层</h5>
+        <div class="items"><span>PostgreSQL</span><span>pgvector HNSW</span><span>文件知识库</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 经验管理 ============ -->
+<section id="experience" style="background:var(--bg)">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="kicker">经验管理</div>
+      <h2>从文档到结构化经验，闭环沉淀与复用</h2>
+      <p>与知识库（Wiki）并列的独立模块：大模型按<strong>模板</strong>从文档自动提取结构化经验条目，人工审核入库，三级检索复用，审核通过可写回 Git 与源文档共同版本管理——避免重复踩坑。</p>
+    </div>
+
+    <!-- 两张特色截图：模板管理 + 经验条目 -->
+    <div class="exp-shots">
+      <article class="exp-shot js-lb"
+        data-file="14-exp-template.png"
+        data-title="模板管理 · 经验模板编辑器"
+        data-desc="左列模板列表（默认/激活标），生成区单输入框由 LLM 推断模板；左 Markdown 编辑 + 右实时预览（解析/校验/拼 prompt/JSON schema），测试台粘贴文档试提取。">
+        <div class="frame">
+          <img src="assets/screenshots/14-exp-template.png" alt="模板管理 截图" loading="lazy">
+          <span class="zoom-hint">🔍 点击放大</span>
+        </div>
+        <div class="meta">
+          <h4>模板管理 <span class="badge">经验</span></h4>
+          <p>模板驱动的核心：定义提取字段、写回格式、可搜字段与展示方式，gate/pitfall 仅是默认模板的示例类型，可自定义任意结构。</p>
+        </div>
+      </article>
+
+      <article class="exp-shot js-lb"
+        data-file="15-exp-items.png"
+        data-title="经验条目 · 审核与运营"
+        data-desc="顶部统计卡（待确认/已确认/已拒绝/合计）+ 状态/类型筛选 + 条目卡片按模板字段动态渲染，单条与批量确认、编辑、导出手册。">
+        <div class="frame">
+          <img src="assets/screenshots/15-exp-items.png" alt="经验条目 截图" loading="lazy">
+          <span class="zoom-hint">🔍 点击放大</span>
+        </div>
+        <div class="meta">
+          <h4>经验条目 <span class="badge">经验</span></h4>
+          <p>审核主界面：LLM 提取的条目默认「待确认」，管理员确认/拒绝/编辑后才入库生效，操作全程留 audit log，可按活动聚合写回 Git。</p>
+        </div>
+      </article>
+    </div>
+
+    <!-- 能力卡片 -->
+    <div class="feat-grid">
+      <div class="feat">
+        <div class="ico" style="background:#F5F3FF;color:#7C3AED">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 3v18M18 3v18M3 6h18M3 18h18"/></svg>
+        </div>
+        <h3>模板驱动 · 字段不硬编码</h3>
+        <p>提取什么字段、写回什么格式、搜哪些字段、飞书/前端怎么展示，全部由 Bot 激活模板定义；tool-calling 按 schema 结构化输出，类型/标签随模板动态渲染。</p>
+      </div>
+      <div class="feat">
+        <div class="ico"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2 2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5M2 12l10 5 10-5"/></svg></div>
+        <h3>LLM 自动提取</h3>
+        <p>Claude tool-calling 按模板从 Markdown 文档结构化抽取经验条目，6 线程并发、文件 SHA256 增量去重，截断 JSON 自动回收，3 次指数退避重试。</p>
+      </div>
+      <div class="feat">
+        <div class="ico" style="background:#ECFDF5;color:#059669">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 12l2 2 4-4"/><path d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20z"/></svg>
+        </div>
+        <h3>人工审核闭环</h3>
+        <p>提取条目默认 pending，管理员前端确认/拒绝/编辑后才 confirmed 入库；字段级 diff、拒绝原因、操作者全程写 audit log，多 bot 合并到全局日志中心。</p>
+      </div>
+      <div class="feat">
+        <div class="ico" style="background:#EFF6FF;color:#2563EB">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3M8 11h6"/></svg>
+        </div>
+        <h3>三级检索回退</h3>
+        <p>只在已确认条目中搜：空格分词 AND → 中文 n-gram OR 宽泛 → LLM 语义兜底（700 条/批并行筛）；每点归纳强制标「（来源：xxx.md）」，支持多轮追问。</p>
+      </div>
+      <div class="feat">
+        <div class="ico" style="background:#FFFBEB;color:#D97706">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 3v6M8 3v6M3 9h18M5 9l1 11h12l1-11"/></svg>
+        </div>
+        <h3>写回 Git 版本化</h3>
+        <p>审核通过的经验按模板渲染为 Markdown 写回原仓库 <code>_confirmed_experiences/</code>，与源文档共同版本管理；双开关（Group + 模板）默认关，自动/手动均可触发。</p>
+      </div>
+      <div class="feat">
+        <div class="ico" style="background:#FEF2F2;color:#DC2626">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16v12H4z"/><path d="M2 20h20M9 8l6 4-6 4z"/></svg>
+        </div>
+        <h3>飞书 / Web 查询复用</h3>
+        <p>飞书 <code>/exp</code> 一键切经验模式，自然语言提问 + 多轮追问，流式合成带来源标注；Web 端同样可查，经验库与知识库双线并行。</p>
+      </div>
+    </div>
+
+    <div class="out-note">
+      <span class="out-chip">存储后端</span> 经验条目 / audit log 支持 per-bot 外部 PG 库，scan_log / sessions 恒留主库保 FK 完整性
+      <span class="out-chip" style="margin-left:14px">热插拔</span> 经验模块独立注册，按 Group 开关，与 Wiki 模块互不影响
+    </div>
+  </div>
+</section>
+
+<!-- ============ 亮点（数据说话） ============ -->
+<section id="highlights" style="background:#fff">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="kicker">线上实跑</div>
+      <h2>用真实运行数据说话</h2>
+      <p>以下数字取自运行中的 WikiBot 实例数据，非演示占位。</p>
+    </div>
+    <div class="hl-grid">
+      <div class="hl">
+        <div class="hl-num">54 <i>→</i> 3.4万</div>
+        <div class="hl-cap">GitLab 仓库 → AI 摄取出的 wiki 知识页面</div>
+        <div class="hl-sub">54 个仓库的原始 .md/.pdf/.docx 等经大模型拆解重组为源摘要、实体页、概念页、分析页，并生成总索引 index.md 供选页，全量 33,949 个 wiki 页面。</div>
+      </div>
+      <div class="hl">
+        <div class="hl-num">19.2万</div>
+        <div class="hl-cap">向量化知识段落（pgvector）</div>
+        <div class="hl-sub">191,958 个段落 1024 维 BGE-M3 dense + sparse 向量，HNSW 索引，Small-to-Big 用 child chunk 定位、parent section 喂生成。</div>
+      </div>
+      <div class="hl">
+        <div class="hl-num">1800+提问<br> 80 组会话</div>
+        <div class="hl-cap">真实提问 · 覆盖 200+ 位用户 / 14 个 Group</div>
+        <div class="hl-sub">web 通道 1350 + 飞书通道 450 条 query_log，含改写/意图/选页/生成各阶段耗时与回退率埋点。</div>
+      </div>
+      <div class="hl">
+        <div class="hl-num">双路 <i>·</i> 三桶</div>
+        <div class="hl-cap">LLM 选页为主，向量检索为辅</div>
+        <div class="hl-sub">高置信的 LLM 页面级选页不会被低置信的向量 chunk 截断——双命中与仅 LLM 命中页读整页，仅向量命中走 chunk-first。</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 技术栈 ============ -->
+<section id="stack" style="background:var(--bg)">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="kicker">技术栈</div>
+      <h2>选型与职责</h2>
+      <p>大模型与检索模型分工明确：大模型负责“读、选、写”，检索模型负责“向量化与召回”。</p>
+    </div>
+    <div class="stack-table">
+      <div class="row"><div class="cell k">🧠 大模型</div><div class="cell v"> <code>Claude</code> <code>DeepSeek</code> <code>GLM</code>负责文档摄取、index 选页、查询改写与意图、流式生成。</div></div>
+      <div class="row"><div class="cell k">🔢 检索模型</div><div class="cell v"><code>BAAI/bge-m3</code>（1024 维 dense + sparse 双向量）<code>BGE-Reranker-v2-M3</code>（cross-encoder，可选精排）。</div></div>
+      <div class="row"><div class="cell k">🔧 后端</div><div class="cell v"><code>FastAPI</code> + <code>asyncio</code><code>PostgreSQL + pgvector</code><code>JWT</code> 鉴权。</div></div>
+      <div class="row"><div class="cell k">🎨 前端</div><div class="cell v"><code>React</code> + <code>Vite</code> + <code>Ant Design</code>；Chat 页常驻挂载保 SSE 流不断，mermaid 渲染、来源跳转 view=kb。</div></div>
+      <div class="row"><div class="cell k">💬 飞书</div><div class="cell v"><code>lark-oapi</code> WebSocket 长连接，服务器主动连飞书，无需公网域名 / Webhook；卡片含 👍/👎 反馈按钮。</div></div>
+      <div class="row"><div class="cell k">📦 部署</div><div class="cell v"><code>Docker Compose</code>，前后端统一 8000 端口；pgvector 数据与 HuggingFace 模型缓存走 Docker volume 持久化。</div></div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <a class="brand" href="#top"><span class="logo">W</span><span>WikiBot</span></a>
+    <p>多机器人企业知识库问答 + 经验管理平台 · 作品展示页</p>
+  </div>
+</footer>
+
+<!-- 灯箱 -->
+<div class="lightbox" id="lightbox">
+  <span class="close" id="lbClose">×</span>
+  <img id="lbImg" src="" alt="截图放大">
+  <div class="cap" id="lbCap"></div>
+</div>
+
+<script src="assets/js/main.js"></script>
+</body>
+</html>

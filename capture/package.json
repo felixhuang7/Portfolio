@@ -1,0 +1,12 @@
+{
+  "name": "wikibot-screenshot-capture",
+  "version": "1.0.0",
+  "private": true,
+  "description": "抓取 WikiBot 运行中系统的真实页面截图（仅用于生成展示页素材）",
+  "scripts": {
+    "capture": "node capture.mjs"
+  },
+  "dependencies": {
+    "playwright": "^1.61.1"
+  }
+}

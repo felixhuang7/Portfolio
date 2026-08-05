@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>作品集 · Portfolio | 全栈作品选择</title>
+<meta name="description" content="全栈作品集入口：点击任意作品卡片，进入它的完整展示页。">
+<link rel="stylesheet" href="assets/css/style.css">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%232563EB'/%3E%3Ctext x='16' y='22' font-size='16' font-weight='900' fill='white' text-anchor='middle' font-family='sans-serif'%3E作%3C/text%3E%3C/svg%3E">
+</head>
+<body>
+
+<!-- ============ 顶部导航 ============ -->
+<nav class="nav">
+  <div class="wrap">
+    <a class="brand" href="index.html">
+      <span class="logo">作</span>
+      <span>作品集 · Portfolio</span>
+    </a>
+    <ul>
+      <li><a href="#works">作品</a></li>
+    </ul>
+    <a class="nav-cta" href="#works">浏览作品 ↓</a>
+  </div>
+</nav>
+
+<!-- ============ Hero ============ -->
+<header class="hero hero-plain" id="top">
+  <div class="wrap">
+    <div class="hero-eyebrow eyebrow">
+      <span class="dot"></span> 作品集 · Portfolio
+    </div>
+    <h1>把想法，<br><span class="grad">做成能落地的产品</span></h1>
+    <p class="lead">
+      这里收录我设计、开发的一些作品。每件作品都有独立的完整展示页——点击下方任意卡片，进入它的故事。
+    </p>
+    <div class="cta-row">
+      <a class="btn btn-primary" href="#works">浏览作品 ↓</a>
+    </div>
+  </div>
+</header>
+
+<!-- ============ 作品选择 ============ -->
+<section id="works" class="works-sec">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="kicker">作品</div>
+      <h2>选择一个作品，进入展示页</h2>
+      <p>每个卡片对应一个独立作品。点击进入它的完整展示页。</p>
+    </div>
+    <div class="works" id="works-grid"><!-- JS 动态填充 --></div>
+  </div>
+</section>
+
+
+
+<footer>
+  <div class="wrap">
+    <a class="brand" href="index.html"><span class="logo">作</span><span>作品集 · Portfolio</span></a>
+    <p>点击任意作品卡片进入展示页</p>
+  </div>
+</footer>
+
+<script src="assets/js/works.js"></script>
+</body>
+</html>
