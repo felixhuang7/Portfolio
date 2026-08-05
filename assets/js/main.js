@@ -23,13 +23,14 @@ const SHOTS = [
 
 const gallery = document.getElementById('gallery')
 const frag = document.createDocumentFragment()
+const thumbnailFile = (file) => file.replace(/(\.[^.]+)$/, '-thumb$1')
 
 SHOTS.forEach((s, i) => {
   const card = document.createElement('article')
   card.className = 'shot'
   card.innerHTML = `
     <div class="frame">
-      <img src="assets/screenshots/${s.file}" alt="${s.title} 截图" loading="lazy"
+      <img src="assets/screenshots/${thumbnailFile(s.file)}" alt="${s.title} 截图" loading="lazy" decoding="async"
            onerror="this.style.display='none';this.parentElement.querySelector('.ph').style.display='block'">
       <div class="ph" style="display:none">
         截图待生成<br><span style="font-size:12px">${s.file}</span>
