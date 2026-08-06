@@ -2,5 +2,8 @@
     "github.copilot.chat.localeOverride": "zh-CN",
     "github.copilot.chat.commitMessageGeneration.instructions": [
         "Write the commit subject in this format: feat: 添加项目展示页. Keep the type prefix, and write the summary after the colon in Simplified Chinese."
-    ]
+    ],
+    "http.proxy": "http://127.0.0.1:7897",
+    "http.proxyStrictSSL": false,
+    "git.path": "D:\\software\\Git\\Git\\bin\\git.exe"
 }
