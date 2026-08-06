@@ -1,0 +1,6 @@
+{
+    "github.copilot.chat.localeOverride": "zh-CN",
+    "github.copilot.chat.commitMessageGeneration.instructions": [
+        "Write the commit subject in this format: feat: 添加项目展示页. Keep the type prefix, and write the summary after the colon in Simplified Chinese."
+    ]
+}

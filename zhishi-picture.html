@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>智识图库 · 可协同的企业级云图库 | 作品展示</title>
+<meta name="description" content="智识图库项目展示：Spring Boot 云图库、空间级 RBAC、WebSocket + Disruptor 协同编辑、以图搜图、颜色检索、AI 扩图与空间分析。">
+<link rel="stylesheet" href="assets/css/style.css">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Cdefs%3E%3ClinearGradient id='g' x2='1' y2='1'%3E%3Cstop stop-color='%230EA5E9'/%3E%3Cstop offset='1' stop-color='%232563EB'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='32' height='32' rx='8' fill='url(%23g)'/%3E%3Cpath d='M8 22l5-6 3 3 3-4 5 7H8z' fill='white'/%3E%3Ccircle cx='12' cy='11' r='2' fill='white'/%3E%3C/svg%3E">
+</head>
+<body class="picture-page">
+<nav class="nav">
+  <div class="wrap">
+    <a class="brand" href="index.html"><span class="logo picture-logo"><img src="assets/img/zhishi-picture-logo.svg" alt=""></span><span>智识图库</span></a>
+    <ul>
+      <li><a href="#overview">概览</a></li>
+      <li><a href="#capabilities">能力</a></li>
+      <li><a href="#collaboration">协同链路</a></li>
+      <li><a href="#permission">权限</a></li>
+      <li><a href="#screens">页面展示</a></li>
+      <li><a href="#stack">技术栈</a></li>
+    </ul>
+    <a class="nav-cta nav-back" href="index.html">← 返回作品集</a>
+  </div>
+</nav>
+
+<header class="hero picture-hero" id="top">
+  <div class="wrap hero-grid">
+    <div>
+      <div class="eyebrow"><span class="status-dot"></span> Java 后端 · 云图库 · 实时协作</div>
+      <h1>不只存图片，<br><span class="grad">让团队一起管理与创作</span></h1>
+      <p class="lead">智识图库是一套面向个人与团队的图片资产平台。它把上传、审核、检索、分析、权限与实时协同串成完整链路，并通过对象存储、分片路由和多级缓存实验，探索图库业务从功能可用到工程可扩展的实现方式。</p>
+      <div class="cta-row">
+        <a class="btn btn-primary" href="#screens">浏览运行截图 ↓</a>
+        <a class="btn btn-ghost" href="#collaboration">拆解协同链路</a>
+      </div>
+      <div class="stat-row">
+        <div class="stat"><b>52</b><span>HTTP 端点</span></div>
+        <div class="stat"><b>5</b><span>细粒度权限</span></div>
+        <div class="stat"><b>6</b><span>空间分析维度</span></div>
+        <div class="stat"><b>3</b><span>团队空间角色</span></div>
+      </div>
+    </div>
+
+    <div class="picture-hero-shot">
+      <div class="browser-bar"><span></span><span></span><span></span><b>智识图库 · 团队图片空间</b><em>原系统前端 · 测试数据</em></div>
+      <img src="assets/screenshots/zp-01-gallery.png" alt="智识图库团队图片空间运行截图">
+    </div>
+  </div>
+</header>
+
+<section id="overview">
+  <div class="wrap">
+    <div class="sec-head"><div class="kicker">PROJECT OVERVIEW</div><h2>围绕图片全生命周期搭建业务闭环</h2><p>项目不是孤立功能的堆叠，而是以“空间”为业务边界，把图片、成员、权限、容量、分析与协同组织到同一套领域模型中。</p></div>
+    <div class="picture-story">
+      <div class="story-lead"><span>01</span><h3>三类使用语境</h3><p>公共图库承接浏览与审核，私有空间服务个人资产，团队空间通过成员角色支持协作；同一张图片在不同空间下进入不同的鉴权路径。</p></div>
+      <div class="story-flow">
+        <div><i>PUBLIC</i><b>公共图库</b><p>公开浏览、上传审核、管理员治理</p></div><span>→</span>
+        <div><i>PRIVATE</i><b>私有空间</b><p>个人资产、容量配额、独立管理</p></div><span>→</span>
+        <div><i>TEAM</i><b>团队空间</b><p>角色权限、成员管理、实时协同</p></div>
+      </div>
+    </div>
+    <div class="hl-grid picture-metrics">
+      <div class="hl"><div class="hl-num">7</div><div class="hl-cap">业务控制器</div><p class="hl-sub">用户、图片、空间、空间成员、空间分析与文件能力形成清晰 API 边界。</p></div>
+      <div class="hl"><div class="hl-num">52</div><div class="hl-cap">HTTP 接口</div><p class="hl-sub">覆盖注册登录、批量上传、审核、搜索、AI 扩图、成员管理与数据分析。</p></div>
+      <div class="hl"><div class="hl-num">12</div><div class="hl-cap">注解鉴权入口</div><p class="hl-sub">敏感接口通过统一空间权限注解接入 Sa-Token 校验链路。</p></div>
+      <div class="hl"><div class="hl-num">6</div><div class="hl-cap">分析端点</div><p class="hl-sub">用量、分类、标签、尺寸、用户贡献与空间排行多维洞察。</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="capabilities" class="picture-capabilities">
+  <div class="wrap">
+    <div class="sec-head"><div class="kicker">CORE CAPABILITIES</div><h2>从资产入库到协作消费</h2><p>把简历里的技术关键词落到用户真正能感知的产品能力上。</p></div>
+    <div class="feat-grid">
+      <article class="feat wide"><div class="ico">↥</div><h3>统一上传模板 + 腾讯云 COS</h3><p>文件上传与 URL 上传复用模板方法流程，统一校验、对象存储、图片元信息提取与结果封装；支持单张、批量抓取和缩略图资源清理。</p><span class="tag">Template Method · Object Storage</span></article>
+      <article class="feat wide"><div class="ico purple">⌕</div><h3>两种“找图”方式</h3><p>以图搜图通过门面统一编排页面地址获取、HTML 解析与结果拉取；颜色搜索把图片主色映射到 RGB 空间，按欧氏距离计算相似度并返回 Top 12。</p><span class="tag">Facade · Color Similarity</span></article>
+      <article class="feat"><div class="ico green">✦</div><h3>AI 智能扩图</h3><p>接入阿里云异步任务接口，创建扩图任务后轮询状态，将生成式图像能力嵌入原有图片编辑流程。</p></article>
+      <article class="feat"><div class="ico orange">◎</div><h3>空间数据分析</h3><p>从容量用量、分类、标签、尺寸、成员贡献和空间排行六个视角理解资产结构与使用情况。</p></article>
+      <article class="feat"><div class="ico red">✓</div><h3>审核与批量治理</h3><p>公共图片包含待审核、通过、拒绝状态；管理员可以批量导入、编辑与审核，形成平台治理入口。</p></article>
+      <article class="feat"><div class="ico cyan">⚡</div><h3>性能与扩展探索</h3><p>保留 Caffeine → Redis → DB 双层缓存实验路径，以随机 TTL 抖动缓解雪崩；按空间 ID 实现 ShardingSphere 自定义分片算法。</p></article>
+    </div>
+  </div>
+</section>
+
+<section id="collaboration" class="arch picture-collab">
+  <div class="wrap">
+    <div class="sec-head"><div class="kicker">REAL-TIME COLLABORATION</div><h2>一次编辑动作，怎样同步给同一张图上的其他人？</h2><p>WebSocket 负责长连接，Disruptor 把网络入口与事件处理解耦，图片维度的会话集合完成定向广播。</p></div>
+    <div class="collab-stage">
+      <div class="collab-lane">
+        <div class="collab-node primary"><small>01 · CLIENT</small><b>编辑者操作图片</b><p>进入编辑 / 旋转 / 缩放 / 退出编辑</p></div><span class="lane-arrow">→</span>
+        <div class="collab-node"><small>02 · WEBSOCKET</small><b>接收 JSON 消息</b><p>会话中解析 user 与 pictureId</p></div><span class="lane-arrow">→</span>
+        <div class="collab-node ring"><small>03 · DISRUPTOR</small><b>发布到 RingBuffer</b><p>生产者快速入队，工作处理器消费</p></div><span class="lane-arrow">→</span>
+        <div class="collab-node"><small>04 · HANDLER</small><b>校验编辑状态</b><p>每张图片同一时刻仅一个编辑者</p></div><span class="lane-arrow">→</span>
+        <div class="collab-node success"><small>05 · BROADCAST</small><b>广播其他会话</b><p>排除当前客户端，避免重复执行</p></div>
+      </div>
+      <div class="collab-notes">
+        <div><span>并发容器</span><b>ConcurrentHashMap + KeySet</b><p>按 pictureId 维护编辑者与在线会话，连接断开时同步清理。</p></div>
+        <div><span>事件驱动</span><b>Producer → WorkHandler</b><p>ENTER_EDIT、EDIT_ACTION、EXIT_EDIT 三类消息进入统一消费分发。</p></div>
+        <div><span>前端一致性</span><b>排除发送方广播</b><p>编辑者本地已执行动作，只向其余客户端推送，避免同一操作重复应用。</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="permission" class="picture-permission">
+  <div class="wrap">
+    <div class="sec-head"><div class="kicker">SPACE-LEVEL RBAC</div><h2>权限不是散落在接口里的 if-else</h2><p>角色—权限关系由 JSON 集中配置，接口只声明需要的权限；Sa-Token 从请求上下文识别 pictureId / spaceId / spaceUserId，再解析当前用户在对应空间的最终权限。</p></div>
+    <div class="permission-layout">
+      <div class="role-matrix">
+        <div class="matrix-head"><span>角色 / 权限</span><span>查看</span><span>上传</span><span>编辑</span><span>删除</span><span>成员</span></div>
+        <div><b>浏览者 <small>viewer</small></b><i class="yes">✓</i><i>—</i><i>—</i><i>—</i><i>—</i></div>
+        <div><b>编辑者 <small>editor</small></b><i class="yes">✓</i><i class="yes">✓</i><i class="yes">✓</i><i class="yes">✓</i><i>—</i></div>
+        <div><b>管理员 <small>admin</small></b><i class="yes">✓</i><i class="yes">✓</i><i class="yes">✓</i><i class="yes">✓</i><i class="yes">✓</i></div>
+      </div>
+      <div class="permission-resolver">
+        <h3>一次注解鉴权的解析路径</h3>
+        <ol><li><b>接口声明</b><span>@SaSpaceCheckPermission("picture:edit")</span></li><li><b>提取上下文</b><span>从 JSON / query 与 URL 模块识别业务 ID</span></li><li><b>定位空间</b><span>pictureId → Picture → spaceId</span></li><li><b>解析角色</b><span>公共 / 私有 / 团队空间分别处理</span></li><li><b>返回权限</b><span>配置映射成 permissionList 交给 Sa-Token</span></li></ol>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="screens" class="picture-screens">
+  <div class="wrap">
+    <div class="sec-head"><div class="kicker">RUNNING FRONTEND</div><h2>从素材检索到 AI 创作的实际页面</h2><p>以下截图来自项目 Vue + Ant Design Vue 业务前端的实际运行页面。截图时通过 Playwright 为未启动的后端接口注入本地测试数据，并在浏览器展示层替换了原模板品牌文案；页面组件、路由、样式与交互均来自项目原前端。</p></div>
+    <div class="runtime-gallery">
+      <article class="runtime-shot featured-shot" data-image="assets/screenshots/zp-01-gallery.png">
+        <div class="runtime-frame"><img src="assets/screenshots/zp-01-gallery.png" alt="团队图片空间运行截图"><span>点击查看大图 ↗</span></div>
+        <div class="runtime-meta"><div><em>01 · ASSET SPACE</em><h3>团队图片空间</h3></div><p>原系统团队空间页面集中展示容量、图片卡片与操作入口，支持按关键词、分类、标签、尺寸、格式和主色进行筛选。</p></div>
+      </article>
+      <article class="runtime-shot" data-image="assets/screenshots/zp-02-color-search.png">
+        <div class="runtime-frame"><img src="assets/screenshots/zp-02-color-search.png" alt="颜色搜图运行截图"><span>点击查看大图 ↗</span></div>
+        <div class="runtime-meta"><div><em>02 · COLOR SEARCH</em><h3>颜色搜图</h3></div><p>团队空间中直接唤起颜色选择器，点击青绿色后只返回同色系主调图片，体现后端按图片主色与目标色 RGB 距离做相似检索。</p></div>
+      </article>
+      <article class="runtime-shot" data-image="assets/screenshots/zp-03-image-search.png">
+        <div class="runtime-frame"><img src="assets/screenshots/zp-03-image-search.png" alt="以图搜图运行截图"><span>点击查看大图 ↗</span></div>
+        <div class="runtime-meta"><div><em>03 · IMAGE SEARCH</em><h3>以图搜图</h3></div><p>以一张图库图片作为原图，调用搜图链路抓取相似图片结果，适合补充同风格素材、查找来源和做视觉参考扩展。</p></div>
+      </article>
+      <article class="runtime-shot" data-image="assets/screenshots/zp-04-ai-outpainting.png">
+        <div class="runtime-frame"><img src="assets/screenshots/zp-04-ai-outpainting.png" alt="AI 扩图运行截图"><span>点击查看大图 ↗</span></div>
+        <div class="runtime-meta"><div><em>04 · AI OUTPAINTING</em><h3>AI 智能扩图</h3></div><p>图片编辑页内打开 AI 扩图弹窗，原图经过异步任务生成更宽画布，能直观看到两侧背景被补全，成功后可应用回图库资产流程。</p></div>
+      </article>
+      <article class="runtime-shot" data-image="assets/screenshots/zp-05-collaboration.png">
+        <div class="runtime-frame"><img src="assets/screenshots/zp-05-collaboration.png" alt="多人协同编辑运行截图"><span>点击查看大图 ↗</span></div>
+        <div class="runtime-meta"><div><em>05 · COLLABORATION</em><h3>多人协同编辑与裁剪</h3></div><p>截图中当前编辑者先放大画面，再用裁剪框选中中间木屋；四角与边线可拖动调整范围，框外遮罩只作用于图片，底部操作按钮仍可点击。</p></div>
+      </article>
+    </div>
+    <div class="screen-note"><b>截图口径</b><span>界面使用本地测试数据，不代表线上真实用户或业务指标；功能结构与后端现有图片、空间、权限、分析和协同能力保持对应。</span></div>
+  </div>
+</section>
+
+<div class="runtime-lightbox" id="runtime-lightbox" role="dialog" aria-modal="true" aria-label="运行截图大图">
+  <button aria-label="关闭">×</button><img src="assets/screenshots/zp-01-gallery.png" alt="运行截图大图"><p></p>
+</div>
+
+<section id="stack" class="picture-stack">
+  <div class="wrap">
+    <div class="sec-head"><div class="kicker">TECH STACK</div><h2>一套围绕图片业务组织的 Java 技术栈</h2><p>技术选择服务于对象存储、权限、实时协作、检索与数据扩展，而不是简单罗列依赖。</p></div>
+    <div class="stack-table">
+      <div class="row"><div class="cell k">应用框架</div><div class="cell v"><code>Java 11</code><code>Spring Boot 2.7.6</code><code>Spring MVC</code><code>Spring AOP</code></div></div>
+      <div class="row"><div class="cell k">数据与存储</div><div class="cell v"><code>MySQL 8</code><code>MyBatis-Plus 3.5.9</code><code>腾讯云 COS</code></div></div>
+      <div class="row"><div class="cell k">权限与会话</div><div class="cell v"><code>Sa-Token 1.39</code><code>Redis Session</code><code>空间级 RBAC</code></div></div>
+      <div class="row"><div class="cell k">实时与并发</div><div class="cell v"><code>WebSocket</code><code>LMAX Disruptor</code><code>ConcurrentHashMap</code></div></div>
+      <div class="row"><div class="cell k">性能扩展</div><div class="cell v"><code>Caffeine</code><code>Redis</code><code>ShardingSphere 5.2</code></div></div>
+      <div class="row"><div class="cell k">智能能力</div><div class="cell v"><code>阿里云 AI 扩图</code><code>Jsoup</code><code>颜色相似度</code><code>以图搜图</code></div></div>
+    </div>
+    <div class="cta-band picture-cta"><h2>从需求、架构到代码落点</h2><p>智识图库展示了我围绕真实业务组织 Java 后端能力，并在权限、实时协作与可扩展性之间做工程拆解的实践。</p><a class="btn btn-primary" href="#top">回到顶部 ↑</a></div>
+  </div>
+</section>
+
+<footer><div class="wrap"><a class="brand" href="index.html"><span class="logo picture-logo"><img src="assets/img/zhishi-picture-logo.svg" alt=""></span><span>智识图库</span></a><p>可协同的企业级云图库 · Spring Boot 后端工程实践</p></div></footer>
+<script src="assets/js/picture.js"></script>
+</body>
+</html>

@@ -1,32 +1,27 @@
-// 作品选择页交互脚本
-// 数据驱动：在 WORKS 数组里加一项即可新增一个作品卡。
-// 1) 渲染作品卡片（含特色大卡 + 筹备中占位卡）
-// 2) hover / 点击进入对应展示页
-
+// 作品选择页：数据驱动渲染。新增作品只需向 WORKS 追加一项。
 const WORKS = [
   {
     id: 'wikibot',
     title: 'WikiBot',
     tagline: '企业知识库问答',
-    desc: '多机器人企业知识库：大模型把 GitLab 文档摄取为结构化 Wiki，LLM 选页 + 向量检索双路定位，飞书 / 前端回复带来源标注的流式回答；并含经验管理模块——模板驱动 LLM 抽取结构化经验、人工审核、写回 Git 复用。',
+    desc: '多机器人企业知识库：大模型把 GitLab 文档摄取为结构化 Wiki，LLM 选页 + 向量检索双路定位，飞书 / 前端输出带来源标注的流式回答，并把工程经验抽取、审核后写回 Git 复用。',
     cover: 'assets/screenshots/13-extra-thumb.png',
     href: 'wikibot.html',
     category: 'AI · 知识库',
     tags: ['FastAPI', 'React', 'pgvector', 'Claude', '飞书'],
     stats: [
-      { n: '3.4万', l: 'wiki 页' },
+      { n: '3.4万', l: 'Wiki 页' },
       { n: '19.2万', l: '向量段落' },
       { n: '1800+', l: '真实提问' },
-      { n: '双路', l: 'wiki选页+向量' },
+      { n: '双路', l: '选页 + 向量' },
     ],
     featured: true,
   },
-  // —— 第二个作品：AgentHub ——
   {
     id: 'agenthub',
     title: 'AgentHub',
     tagline: 'MCP / Agent / Skill 统一注册中心',
-    desc: '团队共享的 AI 资产仓库：把做好的 MCP Server / Agent / Skill / Prompt 上传，经审核后在 Claude Code / Cursor 里用一句话搜到、一键部署。AgentHub 对外提供 MCP 供接入，对话即操作。',
+    desc: '团队共享的 AI 资产仓库：上传 MCP Server / Agent / Skill / Prompt，经审核后在 Claude Code / Cursor 中用一句话搜索、一键部署。平台对外提供 MCP 接入，让对话直接驱动资产治理。',
     cover: 'assets/screenshots/ah-cover-thumb.png',
     href: 'agenthub.html',
     category: 'AI · 资产治理',
@@ -34,90 +29,72 @@ const WORKS = [
     stats: [
       { n: '40+', l: 'Skill 资产' },
       { n: '100+', l: '真实用户' },
-      { n: '30+', l: '位贡献者' },
+      { n: '30+', l: '贡献者' },
       { n: '对话', l: '即操作' },
     ],
     featured: true,
   },
-  // —— 以下为「筹备中」占位卡，新增作品时替换为真实对象即可 ——
-  { ghost: true, title: '筹备中', tagline: '更多作品正在路上', category: 'Coming Soon' },
+  {
+    id: 'zhishi-picture',
+    title: '智识图库',
+    tagline: '可协同的企业级云图库平台',
+    desc: '以图片全生命周期管理为基础，串联公共图库、私有空间与团队空间；通过细粒度 RBAC、WebSocket + Disruptor 协同链路、以图搜图、颜色检索、AI 扩图与空间分析，展示一套完整的 Java 后端工程实践。',
+    cover: 'assets/screenshots/zp-01-gallery.png',
+    href: 'zhishi-picture.html',
+    category: 'Java · 云图库',
+    tags: ['Spring Boot', 'WebSocket', 'Sa-Token', 'ShardingSphere', '腾讯云 COS'],
+    stats: [
+      { n: '52', l: 'HTTP 端点' },
+      { n: '5', l: '细粒度权限' },
+      { n: '6', l: '分析维度' },
+      { n: '实时', l: '协同编辑链路' },
+    ],
+    featured: true,
+  },
 ]
 
 const grid = document.getElementById('works-grid')
 const frag = document.createDocumentFragment()
+const escapeTag = (s) => String(s).replace(/[&<>"']/g, (c) => ({
+  '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;',
+}[c]))
 
-const escapeTag = (s) => s.replace(/[&<>]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;' }[c]))
-
-WORKS.forEach((w) => {
+WORKS.forEach((work) => {
   const card = document.createElement('article')
-  card.className = 'work' + (w.featured ? ' featured' : '') + (w.ghost ? ' ghost' : '')
-  if (w.id) card.dataset.id = w.id
-
-  if (w.ghost) {
-    card.innerHTML = `
-      <div class="work-ghost-body">
-        <div class="work-ghost-ico">
-          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
-            <path d="M12 5v14M5 12h14"/>
-          </svg>
-        </div>
-        <span class="work-ghost-badge">${escapeTag(w.category)}</span>
-        <h3>${escapeTag(w.title)}</h3>
-        <p>${escapeTag(w.tagline)}</p>
-      </div>`
-    frag.appendChild(card)
-    return
-  }
-
-  const tags = (w.tags || [])
-    .map((t) => `<span class="work-tag">${escapeTag(t)}</span>`)
-    .join('')
-  const stats = (w.stats || [])
-    .map((s) => `<div class="ws"><b>${escapeTag(s.n)}</b><span>${escapeTag(s.l)}</span></div>`)
-    .join('')
+  card.className = `work${work.featured ? ' featured' : ''}`
+  card.dataset.id = work.id
+  const tags = work.tags.map((tag) => `<span class="work-tag">${escapeTag(tag)}</span>`).join('')
+  const stats = work.stats.map((stat) => `<div class="ws"><b>${escapeTag(stat.n)}</b><span>${escapeTag(stat.l)}</span></div>`).join('')
 
   card.innerHTML = `
-    <a class="work-cover" href="${w.href}" aria-label="进入 ${escapeTag(w.title)} 展示页">
-      <img src="${w.cover}" alt="${escapeTag(w.title)} 封面" loading="lazy"
-           onerror="this.style.display='none';this.parentElement.classList.add('no-img')">
-      <span class="work-go">查看详情 →</span>
+    <a class="work-cover" href="${escapeTag(work.href)}" aria-label="进入 ${escapeTag(work.title)} 展示页">
+      <img src="${escapeTag(work.cover)}" alt="${escapeTag(work.title)} 封面" loading="lazy"
+        onerror="this.style.display='none';this.parentElement.classList.add('no-img')">
+      <span class="work-go">查看完整项目 →</span>
     </a>
     <div class="work-body">
-      <div class="work-head">
-        <h3>${escapeTag(w.title)}</h3>
-        <span class="work-tagline">${escapeTag(w.tagline)}</span>
-      </div>
-      <p class="work-desc">${escapeTag(w.desc)}</p>
+      <div class="work-head"><h3>${escapeTag(work.title)}</h3><span class="work-tagline">${escapeTag(work.tagline)}</span></div>
+      <p class="work-desc">${escapeTag(work.desc)}</p>
       <div class="work-tags">${tags}</div>
-      ${stats ? `<div class="work-stats">${stats}</div>` : ''}
-      <a class="work-cta" href="${w.href}">进入展示页 <span class="arr">→</span></a>
+      <div class="work-stats">${stats}</div>
+      <a class="work-cta" href="${escapeTag(work.href)}">进入展示页 <span class="arr">→</span></a>
     </div>`
 
-  // 整卡可点击（特色卡内已有链接，这里仅对非链接区域兜底）
-  card.addEventListener('click', (e) => {
-    if (e.target.closest('a')) return
-    window.location.href = w.href
+  card.addEventListener('click', (event) => {
+    if (!event.target.closest('a')) window.location.href = work.href
   })
-
   frag.appendChild(card)
 })
 
 grid.appendChild(frag)
 
-// —— 统计：作品数 ——
-const realCount = WORKS.filter((w) => !w.ghost).length
-const statEl = document.getElementById('stat-works')
-if (statEl) statEl.textContent = realCount
-
-// —— 导航高亮（轻量，沿用展示页做法）——
 const navLinks = document.querySelectorAll('.nav ul a')
-const sections = [...document.querySelectorAll('section[id], header[id]')]
 const observer = new IntersectionObserver((entries) => {
-  entries.forEach((en) => {
-    if (en.isIntersecting) {
-      const id = en.target.id
-      navLinks.forEach((a) => (a.style.color = a.getAttribute('href') === `#${id}` ? 'var(--ink)' : ''))
-    }
+  entries.forEach((entry) => {
+    if (!entry.isIntersecting) return
+    navLinks.forEach((link) => {
+      link.style.color = link.getAttribute('href') === `#${entry.target.id}` ? 'var(--ink)' : ''
+    })
   })
 }, { rootMargin: '-40% 0px -55% 0px' })
-sections.forEach((s) => observer.observe(s))
+document.querySelectorAll('section[id], header[id]').forEach((section) => observer.observe(section))
