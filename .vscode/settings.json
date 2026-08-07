@@ -3,5 +3,5 @@
     "github.copilot.chat.commitMessageGeneration.instructions": [
         "Write the commit subject in this format: feat: 添加项目展示页. Keep the type prefix, and write the summary after the colon in Simplified Chinese."
     ],
-    "git.path": "D:\\software\\Git\\Git\\bin\\git.exe"
+    "git.path": "D:\\software\\Git\\Git\\cmd\\git.exe"
 }
