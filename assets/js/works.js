@@ -43,12 +43,17 @@ const WORKS = [
     href: 'zhishi-picture.html',
     category: 'Java · 云图库',
     tags: ['Spring Boot', 'WebSocket', 'Sa-Token', 'ShardingSphere', '腾讯云 COS'],
-    stats: [
-      { n: '52', l: 'HTTP 端点' },
-      { n: '5', l: '细粒度权限' },
-      { n: '6', l: '分析维度' },
-      { n: '实时', l: '协同编辑链路' },
-    ],
+    featured: true,
+  },
+  {
+    id: 'ai-agent',
+    title: 'AI 智能体应用平台',
+    tagline: '三个智能体，一套可扩展执行底座',
+    desc: '基于 Spring Boot 3 与 Spring AI 构建 TripMind 旅行规划、MyManus 通用工具和情感陪伴智能体；以 ChatMemory、SSE 流式响应、MCP / Tool Calling 与 ReAct 状态机串起从理解需求到调用外部能力的完整链路。',
+    cover: 'assets/screenshots/ai-agent-console-cover.png',
+    href: 'ai-agent.html',
+    category: 'Java · AI Agent',
+    tags: ['Spring AI', 'ReAct', 'MCP', 'Tool Calling', 'SSE'],
     featured: true,
   },
 ]
@@ -64,7 +69,8 @@ WORKS.forEach((work) => {
   card.className = `work${work.featured ? ' featured' : ''}`
   card.dataset.id = work.id
   const tags = work.tags.map((tag) => `<span class="work-tag">${escapeTag(tag)}</span>`).join('')
-  const stats = work.stats.map((stat) => `<div class="ws"><b>${escapeTag(stat.n)}</b><span>${escapeTag(stat.l)}</span></div>`).join('')
+  const stats = (work.stats || []).map((stat) => `<div class="ws"><b>${escapeTag(stat.n)}</b><span>${escapeTag(stat.l)}</span></div>`).join('')
+  const statsBlock = stats ? `<div class="work-stats">${stats}</div>` : ''
 
   card.innerHTML = `
     <a class="work-cover" href="${escapeTag(work.href)}" aria-label="进入 ${escapeTag(work.title)} 展示页">
@@ -76,7 +82,7 @@ WORKS.forEach((work) => {
       <div class="work-head"><h3>${escapeTag(work.title)}</h3><span class="work-tagline">${escapeTag(work.tagline)}</span></div>
       <p class="work-desc">${escapeTag(work.desc)}</p>
       <div class="work-tags">${tags}</div>
-      <div class="work-stats">${stats}</div>
+      ${statsBlock}
       <a class="work-cta" href="${escapeTag(work.href)}">进入展示页 <span class="arr">→</span></a>
     </div>`
 
