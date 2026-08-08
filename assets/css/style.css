@@ -103,6 +103,7 @@ section.tight{padding:56px 0}
   background:linear-gradient(120deg,var(--primary),#7C3AED 60%,#D97706);
   -webkit-background-clip:text;background-clip:text;color:transparent;
 }
+.keep-together{white-space:nowrap}
 .hero .lead{font-size:18.5px;color:var(--muted);max-width:560px;margin-bottom:26px}
 .hero .cta-row{display:flex;gap:14px;flex-wrap:wrap;margin-bottom:30px}
 .btn{
