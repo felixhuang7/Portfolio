@@ -48,12 +48,12 @@ const WORKS = [
   {
     id: 'ai-agent',
     title: 'AI 智能体应用平台',
-    tagline: '三个智能体，一套可扩展执行底座',
-    desc: '基于 Spring Boot 3 与 Spring AI 构建 TripMind 旅行规划、MyManus 通用工具和情感陪伴智能体；以 ChatMemory、SSE 流式响应、MCP / Tool Calling 与 ReAct 状态机串起从理解需求到调用外部能力的完整链路。',
+    tagline: 'TripMind · EmotionalMaster · ReAct Agent',
+    desc: '基于 Spring Boot 3、Spring AI 与 Vue 构建旅行规划、情感问答和通用任务执行三个智能体。EmotionalMaster 接入 RAG 知识增强链路，TripMind 结合地图工具生成可执行行程，ReAct Agent 通过 Tool Calling 与 MCP 自主调用外部工具。',
     cover: 'assets/screenshots/ai-agent-console-cover.png',
     href: 'ai-agent.html',
     category: 'Java · AI Agent',
-    tags: ['Spring AI', 'ReAct', 'MCP', 'Tool Calling', 'SSE'],
+    tags: ['Spring AI', 'RAG', 'PGvector', 'ReAct', 'MCP'],
     featured: true,
   },
 ]

@@ -1,222 +1,50 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
-
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI 智能体应用平台 · Spring AI 多智能体实践</title>
-    <meta name="description" content="基于 Spring Boot 3、Spring AI、MCP、Tool Calling 与 ReAct 构建的三个智能体应用。">
-    <link rel="stylesheet" href="assets/css/style.css">
-    <link rel="icon"
-        href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%234F46E5'/%3E%3Ctext x='16' y='21' font-size='11' font-weight='800' fill='white' text-anchor='middle' font-family='Arial'%3EAI%3C/text%3E%3C/svg%3E">
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI 智能体应用平台 · RAG 与 ReAct 工程实践</title>
+  <meta name="description" content="基于 Spring Boot 3、Spring AI 与 Vue 构建 TripMind、EmotionalMaster 与 ReAct Agent，并集成 RAG、MCP 和 SSE。">
+  <link rel="stylesheet" href="assets/css/style.css">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%234F46E5'/%3E%3Ctext x='16' y='21' font-size='11' font-weight='800' fill='white' text-anchor='middle' font-family='Arial'%3EAI%3C/text%3E%3C/svg%3E">
 </head>
-
 <body class="ai-agent-page">
-    <nav class="nav">
-        <div class="wrap"><a class="brand" href="index.html"><span class="logo ai-logo">AI</span><span>AI
-                    智能体应用平台</span></a>
-            <ul>
-                <li><a href="#agents">智能体</a></li>
-                <li><a href="#react">执行链路</a></li>
-                <li><a href="#engineering">工程亮点</a></li>
-                <li><a href="#stack">技术栈</a></li>
-            </ul><a class="nav-cta nav-back" href="index.html">← 返回作品集</a>
-        </div>
-    </nav>
+<nav class="nav"><div class="wrap"><a class="brand" href="index.html"><span class="logo ai-logo">AI</span><span>AI 智能体应用平台</span></a><ul><li><a href="#agents">三个智能体</a></li><li><a href="#react">执行链路</a></li><li><a href="#engineering">工程亮点</a></li><li><a href="#stack">技术栈</a></li></ul><a class="nav-cta nav-back" href="index.html">← 返回作品集</a></div></nav>
 
-    <header class="hero ai-hero" id="top">
-        <div class="wrap hero-grid">
-            <div>
-                <div class="eyebrow"><span class="status-dot"></span> Java 21 · Spring AI · Agentic Workflow</div>
-                <h1>让大模型不只会回答，<br><span class="grad">还能记忆、规划与行动</span></h1>
-                <p class="lead">围绕旅行规划、通用任务执行和情绪陪伴三个场景，统一组织 Prompt、对话记忆、SSE 流式响应、MCP 与本地工具，并从零实现 ReAct 推理—行动循环。</p>
-                <div class="cta-row"><a class="btn btn-primary" href="#agents">认识三个智能体 ↓</a><a class="btn btn-ghost"
-                        href="#react">查看 ReAct 链路</a></div>
-            </div>
-            <div class="agent-console" aria-label="智能体执行过程示意">
-                <div class="console-bar"><i></i><i></i><i></i><span>MyManus · execution trace</span></div>
-                <div class="console-body">
-                    <p><b>USER</b> 帮我规划南京两日行程，并生成 PDF</p>
-                    <p><b>THINK</b> 需要地点检索、路线规划与文档生成</p>
-                    <p class="call"><span>TOOL CALL</span> amapPoiSearch({ keyword: "景点" })</p>
-                    <p class="call"><span>TOOL CALL</span> amapRoutePlanning({ origin, destination })</p>
-                    <p><b>OBSERVE</b> 已获取地点与路线，继续整理预算</p>
-                    <p class="call"><span>TOOL CALL</span> generatePDF({ content, fileName })</p>
-                    <p class="done"><b>FINISHED</b> 旅行计划与 PDF 已生成</p>
-                </div>
-            </div>
-        </div>
-    </header>
+<header class="hero ai-hero" id="top"><div class="wrap hero-grid"><div><div class="eyebrow"><span class="status-dot"></span> Java 21 · Spring AI · Vue</div><h1>让大模型不只生成答案，<br><span class="grad">还会检索知识、规划与行动</span></h1><p class="lead">平台由 TripMind、EmotionalMaster 与 ReAct Agent 三个智能体组成，分别覆盖旅行规划、RAG 情感知识问答和通用任务执行；统一复用 ChatMemory、Advisor、Tool Calling、MCP 与 SSE 能力。</p><div class="cta-row"><a class="btn btn-primary" href="#agents">认识三个智能体 ↓</a><a class="btn btn-ghost" href="#react">查看 ReAct 链路</a></div></div>
+<div class="agent-console" aria-label="ReAct Agent 执行过程示意"><div class="console-bar"><i></i><i></i><i></i><span>ReAct Agent · execution trace</span></div><div class="console-body"><p><b>USER</b> 收集资料并整理成一份分析报告</p><p><b>THINK</b> 需要检索网页、读取内容并生成文档</p><p class="call"><span>TOOL CALL</span> webSearch({ query })</p><p class="call"><span>TOOL CALL</span> webScraping({ url })</p><p><b>OBSERVE</b> 已获得资料，开始组织报告结构</p><p class="call"><span>TOOL CALL</span> generatePDF({ content, fileName })</p><p class="done"><b>FINISHED</b> 分析报告已生成</p></div></div></div></header>
 
-    <section id="agents">
-        <div class="wrap">
-            <div class="sec-head">
-                <div class="kicker">THREE AGENTS</div>
-                <h2>同一套 AI 基础设施，服务三种任务形态</h2>
-                <p>不是把三个聊天框放在一起，而是按场景差异选择记忆、Prompt、工具与执行控制策略。</p>
-            </div>
-            <div class="agent-tabs" role="tablist">
-                <button class="agent-tab active" data-target="tripmind"><span class="agent-tab-icon route-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 21s7-6.1 7-12A7 7 0 0 0 5 9c0 5.9 7 12 7 12Z"/><circle cx="12" cy="9" r="2.5"/></svg></span><span>01 TripMind</span></button>
-                <button class="agent-tab" data-target="manus"><span class="agent-tab-icon manus-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><circle cx="5" cy="6" r="2"/><circle cx="19" cy="6" r="2"/><circle cx="5" cy="18" r="2"/><circle cx="19" cy="18" r="2"/><path d="m7 7.5 2.7 2.6m4.6 0L17 7.5M7 16.5l2.7-2.6m4.6 0 2.7 2.6"/></svg></span><span>02 MyManus</span></button>
-                <button class="agent-tab" data-target="emotional"><span class="agent-tab-icon heart-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M20.8 5.8a5.5 5.5 0 0 0-7.8 0L12 6.9l-1.1-1.1a5.5 5.5 0 0 0-7.8 7.8L12 22l8.8-8.4a5.5 5.5 0 0 0 0-7.8Z"/></svg></span><span>03 情感大师</span></button>
-            </div>
-            <div class="agent-panels">
-                <article class="agent-panel active" id="tripmind">
-                    <div><div class="agent-title"><span class="agent-panel-icon route-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 21s7-6.1 7-12A7 7 0 0 0 5 9c0 5.9 7 12 7 12Z"/><circle cx="12" cy="9" r="2.5"/></svg></span><span><em>DOMAIN AGENT</em><h3>TripMind：从偏好到可执行旅行计划</h3></span></div>
-                        <p>将目的地、日期、兴趣和预算注入结构化 Prompt；通过高德地图工具与 MCP 获取地点、路线等外部信息，再输出按天编排、带花费明细的攻略，并支持生成 HTML / PDF。</p>
-                    </div>
-                    <ul>
-                        <li>工具结果补足模型不具备的实时地理信息</li>
-                        <li>结构化输入降低遗漏，预算约束贯穿每日行程</li>
-                        <li>SSE 逐段输出，缩短长攻略的首屏等待时间</li>
-                    </ul>
-                </article>
-                <article class="agent-panel" id="manus">
-                    <div><div class="agent-title"><span class="agent-panel-icon manus-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><circle cx="5" cy="6" r="2"/><circle cx="19" cy="6" r="2"/><circle cx="5" cy="18" r="2"/><circle cx="19" cy="18" r="2"/><path d="m7 7.5 2.7 2.6m4.6 0L17 7.5M7 16.5l2.7-2.6m4.6 0 2.7 2.6"/></svg></span><span><em>GENERAL-PURPOSE AGENT</em><h3>MyManus：自主选择工具的通用智能体</h3></span></div>
-                        <p>基于 BaseAgent → ReActAgent → ToolCallAgent 三层抽象实现状态、思考与行动。模型选择工具，后端执行并把观察结果写回上下文，循环至主动终止或达到 5
-                            步上限。</p>
-                    </div>
-                    <ul>
-                        <li>手动关闭框架内置工具执行，完整掌控调用历史</li>
-                        <li>文件、网页、资源下载、终端、PDF、高德地图与终止工具统一注册</li>
-                        <li>IDLE / RUNNING / FINISHED / ERROR 状态防止非法重复执行</li>
-                    </ul>
-                </article>
-                <article class="agent-panel" id="emotional">
-                    <div><div class="agent-title"><span class="agent-panel-icon heart-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M20.8 5.8a5.5 5.5 0 0 0-7.8 0L12 6.9l-1.1-1.1a5.5 5.5 0 0 0-7.8 7.8L12 22l8.8-8.4a5.5 5.5 0 0 0 0-7.8Z"/></svg></span><span><em>CONVERSATIONAL AGENT</em><h3>情感大师：有边界的多轮陪伴</h3></span></div>
-                        <p>通过外置 Prompt 模板约束共情节奏、安全红线与表达方式；MessageWindowChatMemory 以 chatId 隔离会话并保留最近 20 条消息，让回复保持上下文连续。</p>
-                    </div>
-                    <ul>
-                        <li>同步、Flux SSE、ServerSentEvent、SseEmitter 多种接口实践</li>
-                        <li>ChatClient + MessageChatMemoryAdvisor 组合对话记忆</li>
-                        <li>提示词明确危机识别、非诊断边界与本地求助引导</li>
-                    </ul>
-                </article>
-            </div>
-        </div>
-    </section>
+<section id="agents"><div class="wrap"><div class="sec-head"><div class="kicker">THREE AGENTS</div><h2>三个智能体，覆盖规划、问答与自主执行</h2><p>应用层复用 ChatClient、会话记忆、Advisor、工具注册与流式接口，再根据业务场景组合不同能力。</p></div>
+<div class="agent-tabs" role="tablist">
+  <button class="agent-tab active" data-target="tripmind"><span class="agent-tab-icon route-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 21s7-6.1 7-12A7 7 0 0 0 5 9c0 5.9 7 12 7 12Z"/><circle cx="12" cy="9" r="2.5"/></svg></span><span>01 TripMind</span></button>
+  <button class="agent-tab" data-target="emotional-master"><span class="agent-tab-icon heart-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M20.8 5.8a5.5 5.5 0 0 0-7.8 0L12 6.9l-1.1-1.1a5.5 5.5 0 0 0-7.8 7.8L12 22l8.8-8.4a5.5 5.5 0 0 0 0-7.8Z"/></svg></span><span>02 EmotionalMaster</span></button>
+  <button class="agent-tab" data-target="react-agent"><span class="agent-tab-icon manus-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><circle cx="5" cy="6" r="2"/><circle cx="19" cy="6" r="2"/><circle cx="5" cy="18" r="2"/><circle cx="19" cy="18" r="2"/><path d="m7 7.5 2.7 2.6m4.6 0L17 7.5M7 16.5l2.7-2.6m4.6 0 2.7 2.6"/></svg></span><span>03 ReAct Agent</span></button>
+</div>
+<div class="agent-panels">
+  <article class="agent-panel active" id="tripmind"><div><div class="agent-title"><span class="agent-panel-icon route-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 21s7-6.1 7-12A7 7 0 0 0 5 9c0 5.9 7 12 7 12Z"/><circle cx="12" cy="9" r="2.5"/></svg></span><span><em>TRAVEL PLANNING AGENT</em><h3>TripMind：生成可直接采用的个性化旅行计划</h3></span></div><p>根据目的地、日期、兴趣和预算组织结构化 Prompt，结合高德地图与 MCP 工具查询地点和路线，输出按天编排的行程、交通建议、天气准备和费用明细。</p></div><ul><li>地图工具补足模型缺少的实时地点与路线信息</li><li>预算约束贯穿每日行程，并支持生成 HTML 与 PDF</li><li>通过 SSE 分段输出，降低长攻略的首屏等待时间</li></ul></article>
+  <article class="agent-panel" id="emotional-master"><div><div class="agent-title"><span class="agent-panel-icon heart-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M20.8 5.8a5.5 5.5 0 0 0-7.8 0L12 6.9l-1.1-1.1a5.5 5.5 0 0 0-7.8 7.8L12 22l8.8-8.4a5.5 5.5 0 0 0 0-7.8Z"/></svg></span><span><em>RAG CONVERSATIONAL AGENT</em><h3>EmotionalMaster：结合知识库的多轮情感问答</h3></span></div><p>通过领域 Prompt、ChatMemory 与安全边界组织连续对话；使用 RAG 完成 Markdown 文档摄取、查询重写、向量检索和 Advisor 上下文增强，让回答能够参考相关领域资料。</p></div><ul><li>MessageWindowChatMemory 按 chatId 隔离多轮会话</li><li>QuestionAnswerAdvisor 将检索片段加入模型上下文</li><li>支持元信息过滤、相似度阈值、TopK 与 PGvector 切换方案</li></ul></article>
+  <article class="agent-panel" id="react-agent"><div><div class="agent-title"><span class="agent-panel-icon manus-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><circle cx="5" cy="6" r="2"/><circle cx="19" cy="6" r="2"/><circle cx="5" cy="18" r="2"/><circle cx="19" cy="18" r="2"/><path d="m7 7.5 2.7 2.6m4.6 0L17 7.5M7 16.5l2.7-2.6m4.6 0 2.7 2.6"/></svg></span><span><em>GENERAL-PURPOSE AGENT</em><h3>ReAct Agent：在受控循环中自主执行任务</h3></span></div><p>采用 BaseAgent → ReActAgent → ToolCallAgent 分层设计。模型生成 ToolCall，后端执行工具并把 ToolResponse 写回历史，循环完成“思考—行动—观察”，直到任务结束。</p></div><ul><li>统一接入文件、网页、资源下载、终端和 PDF 等工具</li><li>手动维护工具调用历史，完整记录每一步参数与结果</li><li>通过状态机、最大步数和终止工具限制执行边界</li></ul></article>
+</div></div></section>
 
-    <section id="react" class="arch ai-react">
-        <div class="wrap">
-            <div class="sec-head">
-                <div class="kicker">REACT LOOP</div>
-                <h2>一次复杂任务如何从自然语言走到工具执行？</h2>
-                <p>核心不是一次模型请求，而是“思考—行动—观察”的受控循环。</p>
-            </div>
-            <div class="flow react-flow">
-                <div class="step"><span class="n">1</span>
-                    <h4>接收任务</h4>
-                    <p>校验状态与输入，将 UserMessage 加入智能体上下文。</p>
-                </div>
-                <div class="step"><span class="n">2</span>
-                    <h4>模型思考</h4>
-                    <p>带系统 Prompt 和可用工具清单请求模型，解析 ToolCall。</p>
-                </div>
-                <div class="step"><span class="n">3</span>
-                    <h4>执行工具</h4>
-                    <p>ToolCallingManager 调用 Java 工具或 MCP Server。</p>
-                </div>
-                <div class="step"><span class="n">4</span>
-                    <h4>写回观察</h4>
-                    <p>将助手调用与 ToolResponse 一并追加到会话历史。</p>
-                </div>
-                <div class="step"><span class="n">5</span>
-                    <h4>继续或终止</h4>
-                    <p>无工具、主动 terminate 或达到步数上限时结束。</p>
-                </div>
-            </div>
-            <div class="state-strip"><span>IDLE</span><i>→</i><span
-                    class="hot">RUNNING</span><i>→</i><span>FINISHED</span><em>异常分支 → ERROR</em></div>
-        </div>
-    </section>
+<section id="react" class="arch ai-react"><div class="wrap"><div class="sec-head"><div class="kicker">REACT AGENT · EXECUTION LOOP</div><h2>一次复杂任务如何从自然语言走到工具执行？</h2><p>ReAct Agent 通过“思考—行动—观察”的受控循环逐步完成复杂任务。</p></div><div class="flow react-flow"><div class="step"><span class="n">1</span><h4>接收任务</h4><p>校验输入和当前状态，将用户消息写入智能体上下文。</p></div><div class="step"><span class="n">2</span><h4>模型思考</h4><p>结合系统 Prompt、历史消息和工具清单判断下一步。</p></div><div class="step"><span class="n">3</span><h4>执行工具</h4><p>ToolCallingManager 调用模型选中的 Java 或 MCP 工具。</p></div><div class="step"><span class="n">4</span><h4>写回观察</h4><p>将 ToolCall 与 ToolResponse 追加到会话历史。</p></div><div class="step"><span class="n">5</span><h4>继续或终止</h4><p>生成最终答案、调用终止工具或达到步数上限时结束。</p></div></div><div class="state-strip"><span>IDLE</span><i>→</i><span class="hot">RUNNING</span><i>→</i><span>FINISHED</span><em>异常分支 → ERROR</em></div></div></section>
 
-    <section id="engineering">
-        <div class="wrap">
-            <div class="sec-head">
-                <div class="kicker">ENGINEERING HIGHLIGHTS</div>
-                <h2>把 AI 能力做成可维护的 Java 应用</h2>
-                <p>页面内容均来自当前项目源码与简历知识点，数据口径采用可由代码直接验证的事实。</p>
-            </div>
-            <div class="feat-grid">
-                <article class="feat wide">
-                    <div class="ico">∞</div>
-                    <h3>多轮记忆与会话隔离</h3>
-                    <p>MessageChatMemoryAdvisor 在调用链中自动装配历史消息；使用 conversationId 区分用户会话，并通过固定窗口控制上下文长度与 Token 成本。</p>
-                    <span class="tag">ChatMemory · Advisor</span>
-                </article>
-                <article class="feat wide">
-                    <div class="ico purple">⇄</div>
-                    <h3>三种 SSE 实现对比</h3>
-                    <p>分别实践 Flux&lt;String&gt;、Flux&lt;ServerSentEvent&gt; 与 SseEmitter，既理解 WebFlux 数据流，也处理传统 MVC
-                        中的异步推送、超时和完成回调。</p><span class="tag">Reactor · SseEmitter</span>
-                </article>
-                <article class="feat">
-                    <div class="ico green">⌘</div>
-                    <h3>MCP + 本地工具</h3>
-                    <p>通过 ToolCallback[] 统一暴露 MCP 与 Java 工具，让智能体只面向能力描述选择工具，降低业务层对具体集成方式的感知。</p>
-                </article>
-                <article class="feat">
-                    <div class="ico orange">◎</div>
-                    <h3>可插拔 Advisor</h3>
-                    <p>日志 Advisor 同时覆盖同步与流式调用；Re-Reading Advisor 在请求前改写 Prompt，展示调用链前后增强能力。</p>
-                </article>
-                <article class="feat">
-                    <div class="ico red">◇</div>
-                    <h3>安全执行边界</h3>
-                    <p>最大步数避免无限循环，显式终止工具结束任务，状态机约束生命周期；工具结果完整回填，使下一步决策有据可依。</p>
-                </article>
-            </div>
-        </div>
-    </section>
+<section id="engineering"><div class="wrap"><div class="sec-head"><div class="kicker">ENGINEERING HIGHLIGHTS</div><h2>把模型能力组织成可扩展应用</h2><p>三个智能体共享基础组件，同时保留各自的业务流程与执行边界。</p></div><div class="feat-grid">
+<article class="feat wide"><div class="ico">⌕</div><h3>查询重写 + 多策略 RAG</h3><p>EmotionalMaster 先用 QueryRewriter 优化检索表达，再通过 QuestionAnswerAdvisor 接入向量库；同时支持元信息过滤、相似度阈值和 TopK。</p><span class="tag">RAG · Advisor · Metadata Filter</span></article>
+<article class="feat wide"><div class="ico purple">⇄</div><h3>Vue + EventSource 流式交互</h3><p>前端通过 EventSource 消费 SSE，持续展示模型内容；后端同时实践 Flux、ServerSentEvent 与 SseEmitter 等流式输出方式。</p><span class="tag">Vue · Vite · SSE</span></article>
+<article class="feat"><div class="ico green">∞</div><h3>多轮会话记忆</h3><p>MessageChatMemoryAdvisor 自动装配历史消息，conversationId 隔离不同用户会话，并通过窗口大小控制 Token 成本。</p></article>
+<article class="feat"><div class="ico orange">⌘</div><h3>Tool Calling + MCP</h3><p>地图、网页、文件和 PDF 等本地工具与 MCP 工具统一暴露给模型，降低智能体对具体实现的依赖。</p></article>
+<article class="feat"><div class="ico red">◇</div><h3>ReAct 执行边界</h3><p>状态机、最大执行步数和显式终止工具限制循环，工具响应完整写回上下文以驱动下一轮决策。</p></article>
+</div></div></section>
 
-    <section id="stack" class="ai-stack">
-        <div class="wrap">
-            <div class="sec-head">
-                <div class="kicker">TECH STACK</div>
-                <h2>围绕模型调用、行动能力与工程交付组织技术栈</h2>
-            </div>
-            <div class="stack-table">
-                <div class="row">
-                    <div class="cell k">基础框架</div>
-                    <div class="cell v">
-                        <code>Java 21</code><code>Spring Boot 3.4</code><code>Spring AI 1.0</code><code>Spring AI Alibaba</code>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="cell k">模型与记忆</div>
-                    <div class="cell v">
-                        <code>DashScope</code><code>ChatClient</code><code>ChatMemory</code><code>Advisor</code></div>
-                </div>
-                <div class="row">
-                    <div class="cell k">智能体执行</div>
-                    <div class="cell v">
-                        <code>ReAct</code><code>Tool Calling</code><code>MCP Client</code>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="cell k">知识与数据</div>
-                    <div class="cell v">
-                        <code>PGvector</code><code>Embedding</code><code>MySQL</code><code>MyBatis</code></div>
-                </div>
-                <div class="row">
-                    <div class="cell k">外部能力</div>
-                    <div class="cell v"><code>高德地图</code><code>网页抓取</code><code>文件 / PDF</code><code>资源下载</code></div>
-                </div>
-                <div class="row">
-                    <div class="cell k">接口体验</div>
-                    <div class="cell v">
-                        <code>SSE</code><code>Reactor Flux</code><code>SseEmitter</code><code>Knife4j</code></div>
-                </div>
-            </div>
-        </div>
-    </section>
-    <footer>
-        <div class="wrap"><a class="brand" href="index.html"><span class="logo ai-logo">AI</span><span>AI
-                    智能体应用平台</span></a>
-            <p>Spring AI 多智能体与工具调用工程实践 · 黄继祥</p>
-        </div>
-    </footer>
-    <script src="assets/js/ai-agent.js"></script>
+<section id="stack" class="ai-stack"><div class="wrap"><div class="sec-head"><div class="kicker">TECH STACK</div><h2>围绕知识检索、任务执行与流式体验组织技术栈</h2></div><div class="stack-table">
+<div class="row"><div class="cell k">应用框架</div><div class="cell v"><code>Java 21</code><code>Spring Boot 3</code><code>Spring AI</code><code>Spring AI Alibaba</code></div></div>
+<div class="row"><div class="cell k">RAG 链路</div><div class="cell v"><code>MarkdownDocumentReader</code><code>Embedding</code><code>QuestionAnswerAdvisor</code><code>Query Rewrite</code></div></div>
+<div class="row"><div class="cell k">向量存储</div><div class="cell v"><code>SimpleVectorStore</code><code>PGvector</code><code>HNSW</code><code>Metadata Filter</code></div></div>
+<div class="row"><div class="cell k">智能体执行</div><div class="cell v"><code>ReAct</code><code>Tool Calling</code><code>MCP Client</code><code>State Machine</code></div></div>
+<div class="row"><div class="cell k">前端与接口</div><div class="cell v"><code>Vue 3</code><code>Vite</code><code>EventSource</code><code>SSE</code></div></div>
+<div class="row"><div class="cell k">外部能力</div><div class="cell v"><code>高德地图</code><code>Web Search</code><code>File / PDF</code><code>Image Search MCP</code></div></div>
+</div></div></section>
+
+<footer><div class="wrap"><a class="brand" href="index.html"><span class="logo ai-logo">AI</span><span>AI 智能体应用平台</span></a><p>TripMind · EmotionalMaster · ReAct Agent · 黄继祥</p></div></footer>
+<script src="assets/js/ai-agent.js"></script>
 </body>
-
 </html>

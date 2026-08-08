@@ -73,7 +73,7 @@
 
 <section id="collaboration" class="arch picture-collab">
   <div class="wrap">
-    <div class="sec-head"><div class="kicker">REAL-TIME COLLABORATION</div><h2>一次编辑动作，怎样同步给同一张图上的其他人？</h2><p>WebSocket 负责长连接，Disruptor 把网络入口与事件处理解耦，图片维度的会话集合完成定向广播。</p></div>
+    <div class="sec-head"><div class="kicker">REAL-TIME COLLABORATION</div><h2 class="no-wrap-title">一次编辑动作，怎样同步给同一张图上的其他人？</h2><p class="no-wrap-title">WebSocket 负责长连接，Disruptor 把网络入口与事件处理解耦，图片维度的会话集合完成定向广播。</p></div>
     <div class="collab-stage">
       <div class="collab-lane">
         <div class="collab-node primary"><small>01 · CLIENT</small><b>编辑者操作图片</b><p>进入编辑 / 旋转 / 缩放 / 退出编辑</p></div><span class="lane-arrow">→</span>
@@ -96,7 +96,7 @@
     <div class="sec-head"><div class="kicker">SPACE-LEVEL RBAC</div><h2>权限不是散落在接口里的 if-else</h2><p>角色—权限关系由 JSON 集中配置，接口只声明需要的权限；Sa-Token 从请求上下文识别 pictureId / spaceId / spaceUserId，再解析当前用户在对应空间的最终权限。</p></div>
     <div class="permission-layout">
       <div class="role-matrix">
-        <div class="matrix-head"><span>角色 / 权限</span><span>查看</span><span>上传</span><span>编辑</span><span>删除</span><span>成员</span></div>
+        <div class="matrix-head"><span>角色 / 权限</span><span>查看</span><span>上传</span><span>编辑</span><span>删除</span><span>成员管理</span></div>
         <div><b>浏览者 <small>viewer</small></b><i class="yes">✓</i><i>—</i><i>—</i><i>—</i><i>—</i></div>
         <div><b>编辑者 <small>editor</small></b><i class="yes">✓</i><i class="yes">✓</i><i class="yes">✓</i><i class="yes">✓</i><i>—</i></div>
         <div><b>管理员 <small>admin</small></b><i class="yes">✓</i><i class="yes">✓</i><i class="yes">✓</i><i class="yes">✓</i><i class="yes">✓</i></div>
