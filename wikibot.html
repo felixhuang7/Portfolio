@@ -99,21 +99,21 @@
           <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 7h18M3 12h18M3 17h12"/></svg>
         </div>
         <h3>经验模式 · 工程经验沉淀</h3>
-        <p>从 GitLab commit 历史中自动扫描提取结构化经验（决策规则 + 踩坑教训），经人工审查确认后入库，飞书机器人可直接查询复用，避免重复踩坑。</p>
+        <p>从 GitLab commit 历史中自动扫描提取结构化经验，经人工审查确认后入库，飞书机器人可直接查询复用，避免重复踩坑。</p>
       </div>
       <div class="feat">
         <div class="ico" style="background:#ECFDF5;color:#059669">
           <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20z"/><path d="M7 12h2l2 3 4-6"/></svg>
         </div>
         <h3>飞书长连接接入</h3>
-        <p>WebSocket 长连接（lark-oapi），服务器主动连接飞书，无需公网域名与 Webhook 回调，部署门槛极低。</p>
+        <p>通过长连接主动连接飞书，无需配置公网回调地址或 Webhook。</p>
       </div>
       <div class="feat">
         <div class="ico" style="background:#F5F3FF;color:#7C3AED">
           <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 3v18M18 3v18M3 6h18M3 18h18"/></svg>
         </div>
         <h3>LLM + 向量 双路检索</h3>
-        <p>主路径：LLM 读 wiki/index.md 做页面级语义选页（高置信）；辅路径：pgvector dense+sparse 做段落级召回（补充）。三桶合并，互不截断。</p>
+        <p>主路径：LLM 读 wiki/index.md 做页面级语义选页；辅路径：pgvector dense+sparse 做段落级召回补充。两路结果按三桶策略合并。</p>
       </div>
       <div class="feat">
         <div class="ico" style="background:#FEF2F2;color:#DC2626">
@@ -300,7 +300,7 @@
       <div class="step"><span class="n">1</span><h4>意图检测 + 查询改写</h4><p>Claude 单次调用输出 JSON：代词消解、时间词展开、口语规范化；意图三态（查询 / 问候 / 偏题），问候与偏题跳过检索。</p></div>
       <div class="step"><span class="n">2</span><h4>LLM 选页（主路径）</h4><p>把 index.md 全文交 Claude 做页面级语义判断，行号方案输出 ids 还原路径；精准查询严格筛、汇总查询宁可多选。高置信。</p></div>
       <div class="step"><span class="n">3</span><h4>向量检索（辅路径）</h4><p>index 向量预筛 ~1ms 选页面，pgvector HNSW 做 dense + sparse RRF（k=60）段落级召回；keyword_path 结构化路径经第二层 RRF 融合。</p></div>
-      <div class="step"><span class="n">4</span><h4>三桶合并 + 分级读取</h4><p>b1 双命中读整页 / b2 仅 LLM 读整页 / b3 仅向量 chunk-first；跨页段落去重，超预算等比压缩，不丢弃任何页面。</p></div>
+      <div class="step"><span class="n">4</span><h4>三桶合并 + 分级读取</h4><p>b1 双命中读整页 / b2 仅 LLM 读整页 / b3 仅向量 chunk-first；跨页段落去重，并在超出上下文预算时按比例压缩内容。</p></div>
       <div class="step"><span class="n">5</span><h4>流式生成 + 来源</h4><p>Claude 流式生成，内联 [[wikilink]] 注明来源，底部附「📎 参考来源」可跳源文件；可选 AI 分析小节明确标注非原文。</p></div>
     </div>
 
@@ -414,7 +414,7 @@
     </div>
 
     <div class="out-note">
-      <span class="out-chip">存储后端</span> 经验条目 / audit log 支持 per-bot 外部 PG 库，scan_log / sessions 恒留主库保 FK 完整性
+      <span class="out-chip">存储后端</span> 经验条目支持存储 per-bot 外部PG库
       <span class="out-chip" style="margin-left:14px">热插拔</span> 经验模块独立注册，按 Group 开关，与 Wiki 模块互不影响
     </div>
   </div>
