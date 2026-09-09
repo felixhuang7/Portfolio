@@ -20,7 +20,7 @@ const WORKS = [
   {
     id: 'agenthub',
     title: 'AgentHub',
-    tagline: 'MCP / Agent / Skill 统一注册中心',
+    tagline: 'MCP / Agent / Skill / Prompt 统一注册中心',
     desc: '团队共享的 AI 资产仓库：上传 MCP Server / Agent / Skill / Prompt，经审核后在 Agent 中用一句话搜索、一键安装。平台对外提供 MCP 接入，让对话直接驱动资产治理。',
     cover: 'assets/screenshots/ah-cover-thumb.png',
     href: 'agenthub.html',
