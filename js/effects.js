@@ -92,15 +92,15 @@ document.addEventListener('DOMContentLoaded', () => {
     for (let i = 0; i < amount; i++) {
       const angle = Math.random() * Math.PI * 2
       const velocity = (.4 + Math.random()) * speed
-      const life = 25 + Math.random() * 20
+      const life = 34 + Math.random() * 24
       particles.push({ x, y, vx: Math.cos(angle) * velocity, vy: Math.sin(angle) * velocity,
-        life, total: life, radius: 1.5 + Math.random() * 2, color: colors[i % colors.length] })
+        life, total: life, radius: 2 + Math.random() * 2.5, color: colors[i % colors.length] })
     }
     if (!frame) frame = requestAnimationFrame(draw)
   }
   document.addEventListener('pointerdown', event => {
     if (event.button !== 0) return
-    burst(event.clientX, event.clientY, innerWidth < 768 ? 16 : 28, 3)
+    burst(event.clientX, event.clientY, innerWidth < 768 ? 56 : 84, 2.8)
   }, { passive: true })
   document.addEventListener('input', event => {
     const input = event.target
