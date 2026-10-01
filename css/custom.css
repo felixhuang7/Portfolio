@@ -233,7 +233,6 @@ html.hide-aside .toc-interactive #toc-toggle { display: block; }
   87.5% { text-shadow: 0 0 12px #5636ed; }
 }
 .effects-canvas { position: fixed; inset: 0; z-index: 1100; width: 100%; height: 100%; pointer-events: none; }
-canvas.fireworks { opacity: .82; }
 html.motion-paused *, html.motion-paused *::after { animation-play-state: paused !important; }
 @media (max-width: 768px) {
   #post-info .post-title { font-size: 24px; }
