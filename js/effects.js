@@ -100,7 +100,7 @@ document.addEventListener('DOMContentLoaded', () => {
   }
   document.addEventListener('pointerdown', event => {
     if (event.button !== 0) return
-    burst(event.clientX, event.clientY, innerWidth < 768 ? 56 : 84, 2.8)
+    burst(event.clientX, event.clientY, innerWidth < 768 ? 16 : 28, 3)
   }, { passive: true })
   document.addEventListener('input', event => {
     const input = event.target
