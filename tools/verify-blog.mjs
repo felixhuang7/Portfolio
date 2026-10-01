@@ -83,6 +83,8 @@ try {
         }
       } else {
         assert.equal(await page.locator('#toc-toggle').getAttribute('aria-expanded'), 'true', 'each article should start with its TOC open')
+        assert.deepEqual(await page.locator('#card-toc .toc-text').evaluateAll(nodes => [...new Set(nodes.map(e => getComputedStyle(e).fontSize))]), ['16px'], 'all TOC levels should use the same larger font')
+        assert.match(await page.locator('link[href*="/css/custom.css"]').getAttribute('href'), /\?v=[a-f0-9]{12}$/)
         assert.ok(audit.headings > 60)
         if (name === 'harness') assert.equal(audit.diagrams, 5)
         if (width === 1440) {
@@ -92,12 +94,19 @@ try {
           assert.ok((await page.locator('#aside-content').evaluate(e => getComputedStyle(e).transitionDuration)).includes('0.75s'))
           assert.match(await page.locator('#toc-close').textContent(), /收起/)
           assert.match(await page.locator('#toc-toggle').textContent(), /展开目录/)
-          for (const scrollPosition of [3000, 12000]) {
+          for (const scrollPosition of [3000, 12000, 3000]) {
             await page.evaluate(y => scrollTo(0, y), scrollPosition)
             await page.waitForTimeout(600)
             const stickyToc = await page.locator('#card-toc').boundingBox()
             assert.ok(stickyToc.y >= 60 && stickyToc.y < 100, 'TOC should follow the viewport deep in the article')
             assert.ok(stickyToc.y + stickyToc.height <= 900, 'sticky TOC should fit in the viewport')
+            const activeTocItem = await page.locator('#card-toc .toc-link.active').evaluate(e => {
+              const bounds = e.getBoundingClientRect()
+              const scrollArea = e.closest('.toc-content')
+              const areaTop = scrollArea.getBoundingClientRect().top + scrollArea.clientTop
+              return { top: bounds.top, bottom: bounds.bottom, areaTop, areaBottom: areaTop + scrollArea.clientHeight }
+            })
+            assert.ok(activeTocItem.top >= activeTocItem.areaTop - 1 && activeTocItem.bottom <= activeTocItem.areaBottom + 1, 'active chapter should remain visible inside the scrolling TOC')
           }
           await animateToc(page, 'toc-close')
           assert.equal(await page.locator('#card-toc').evaluate(e => getComputedStyle(e.closest('#aside-content')).opacity), '0')

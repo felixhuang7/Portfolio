@@ -373,13 +373,17 @@ document.addEventListener('DOMContentLoaded', function () {
       })
 
       autoScrollToc = item => {
-        const activePosition = item.getBoundingClientRect().top
-        const sidebarScrollTop = $cardToc.scrollTop
-        if (activePosition > (document.documentElement.clientHeight - 100)) {
-          $cardToc.scrollTop = sidebarScrollTop + 150
-        }
-        if (activePosition < 100) {
-          $cardToc.scrollTop = sidebarScrollTop - 150
+        const itemBounds = item.getBoundingClientRect()
+        const tocBounds = $cardToc.getBoundingClientRect()
+        const visibleTop = tocBounds.top + $cardToc.clientTop
+        const visibleBottom = visibleTop + $cardToc.clientHeight
+        // Follow the active chapter inside the TOC's own scrollable area.
+        // Center it in one move, including after a large jump in the article.
+        if (itemBounds.top < visibleTop + 16 || itemBounds.bottom > visibleBottom - 16) {
+          $cardToc.scrollTo({
+            top: $cardToc.scrollTop + (itemBounds.top + itemBounds.bottom) / 2 - (visibleTop + visibleBottom) / 2,
+            behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth'
+          })
         }
       }
     }

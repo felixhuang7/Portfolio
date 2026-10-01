@@ -3,6 +3,7 @@ from pathlib import Path
 from copy import deepcopy
 from html import escape
 import argparse
+import hashlib
 import json
 import math
 import re
@@ -190,6 +191,13 @@ def metadata(page, path, title, description='', post=False, home=False):
 
 
 def output(page, path):
+    # Updated local styles and scripts must not reuse an older cached asset.
+    for node, attr in [(node, 'href') for node in page.select('link[rel="stylesheet"][href]')] + [(node, 'src') for node in page.select('script[src]')]:
+        url = node[attr].split('?', 1)[0]
+        if url.startswith(('/css/', '/js/')):
+            asset = ROOT / url.lstrip('/')
+            version = hashlib.sha256(asset.read_text(encoding='utf-8').encode('utf-8')).hexdigest()[:12]
+            node[attr] = f'{url}?v={version}'
     # root-relative paths support both a dedicated blog and /blog beside Portfolio.
     if BASE != '/':
         for node in page.select('[href], [src]'):
