@@ -347,14 +347,14 @@ document.addEventListener('DOMContentLoaded', function () {
 
       window.mobileToc = {
         open: () => {
-          $cardTocLayout.style.cssText = 'animation: toc-open .3s; opacity: 1; left: 16px; right: auto; pointer-events: auto'
+          $cardTocLayout.style.cssText = 'animation: toc-open .55s; opacity: 1; left: 16px; right: auto; pointer-events: auto'
         },
 
         close: () => {
-          $cardTocLayout.style.animation = 'toc-close .2s'
+          $cardTocLayout.style.animation = 'toc-close .45s'
           setTimeout(() => {
             $cardTocLayout.style.cssText = ''
-          }, 100)
+          }, 450)
         }
       }
 
