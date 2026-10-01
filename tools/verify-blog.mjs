@@ -43,7 +43,7 @@ try {
         assert.equal(await page.locator('.recent-post-item').count(), 2)
         assert.equal(await page.locator('#card-info-btn').getAttribute('href'), 'https://github.com/felixhuang7')
         assert.equal(await page.locator('#card-info-btn').innerText(), '🚀 去康康我的 GitHub')
-        assert.equal(await page.locator('#card-info-btn .fa-github').count(), 1)
+        assert.equal(await page.locator('#card-info-btn .fa-github').count(), 0)
         assert.equal(await page.locator('a[href*="zhishimianbao"]').count(), 0)
         assert.equal(await page.locator('.author-info__description').count(), 0)
         await page.locator('#search-button .search').click()

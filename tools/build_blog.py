@@ -127,8 +127,7 @@ def common(page):
         button['href'] = 'https://github.com/felixhuang7'
         icon = button.select_one('i')
         if icon:
-            icon['class'] = ['fab', 'fa-github']
-            icon['aria-hidden'] = 'true'
+            icon.decompose()
         button.select_one('span').string = '🚀 去康康我的 GitHub'
     for link in page.select('a[target="_blank"]'):
         link['rel'] = ['noopener', 'noreferrer']
