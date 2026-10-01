@@ -1,0 +1,17 @@
+%%{init: {"theme":"dark","sequence":{"mirrorActors":false,"actorMargin":24,"messageMargin":22,"width":100,"height":40},"themeVariables":{"actorBkg":"#2D3742","actorBorder":"#8B9BAA","actorTextColor":"#F2F5F7","actorLineColor":"#8B9BAA","signalColor":"#D6DFE8","signalTextColor":"#F2F5F7"}}}%%
+sequenceDiagram
+    participant I as 交互层
+    participant G as 网关层
+    participant A as 应用层
+    participant R as 运行层
+    R-->>A: 发布待审批事件
+    A-->>G: 推送报告与审批请求
+    G-->>I: 转发审批事件
+    I->>G: 提交用户批准决定
+    G->>A: 认证后转发审批
+    A->>A: 校验并持久化审批
+    A->>R: 唤醒同一个Run
+    R->>R: 重验、创建工单、验收
+    R-->>A: 发布完成事件
+    A-->>G: 推送最终结果
+    G-->>I: 转发结果与产物引用

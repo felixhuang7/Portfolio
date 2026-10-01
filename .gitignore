@@ -1,0 +1,7 @@
+tools/node_modules/
+tools/qa/
+__pycache__/
+doc/
+serve.log
+serve.err
+serve.pid

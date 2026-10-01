@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://felixhuang7.dpdns.org/sitemap.xml

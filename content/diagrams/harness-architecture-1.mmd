@@ -1,0 +1,26 @@
+flowchart TB
+    U[用户 / 外部业务事件] --> L1[1 交互层<br/>Web · Desktop · IDE · CLI · API]
+    L1 --> L2[2 网关层<br/>认证 · 租户识别 · 限流 · 请求校验]
+    L2 --> L3[3 应用层<br/>Session · Run · 审批 · 产物 · 事件订阅]
+    subgraph L4[4 运行层]
+        direction TB
+        CORE[Agent 核心<br/>状态机 · Agent Loop · 调度 · 多 Agent]
+        C[L4.1 上下文层<br/>Context Builder · RAG · Memory · 压缩]
+        T[L4.2 工具层<br/>Tool Registry · MCP · Skill · Hook · Sandbox]
+        M[L4.3 模型层<br/>Model Gateway · 适配 · 路由 · 推理服务]
+        CORE <--> C
+        CORE <--> T
+        CORE <--> M
+    end
+    L3 --> CORE
+    T --> EXT[文件 / 浏览器 / 数据库 / 企业业务 API]
+    C --> DATA[文档库 / 检索索引 / 记忆库]
+    L3 --> STATE[持久化底座<br/>关系数据库 · 事件日志 · 对象存储 · 队列]
+    CORE --> STATE
+    G[横向治理<br/>安全与权限 · 可观测性 · 评测 · 成本 · 版本发布] -.-> L1
+    G -.-> L2
+    G -.-> L3
+    G -.-> CORE
+    G -.-> C
+    G -.-> T
+    G -.-> M

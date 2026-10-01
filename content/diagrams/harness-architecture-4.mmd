@@ -1,0 +1,17 @@
+%%{init: {"theme":"dark","sequence":{"mirrorActors":false,"actorMargin":24,"messageMargin":22,"width":100,"height":40},"themeVariables":{"actorBkg":"#2D3742","actorBorder":"#8B9BAA","actorTextColor":"#F2F5F7","actorLineColor":"#8B9BAA","signalColor":"#D6DFE8","signalTextColor":"#F2F5F7"}}}%%
+sequenceDiagram
+    participant P as Agent核心
+    participant C as 上下文层
+    participant M as 模型层
+    participant T as 工具层
+    P->>C: 装配目标、状态与证据
+    C-->>P: 返回本轮上下文
+    P->>M: 请求下一步动作
+    M-->>P: 返回查询动作
+    P->>T: 校验后查询日志与指标
+    T-->>P: 返回结果与回执
+    P->>C: 纳入查询结果与来源
+    C-->>P: 返回更新后的上下文
+    P->>M: 请求报告与工单草稿
+    M-->>P: 返回候选产物
+    P->>P: 验证并判断是否需审批

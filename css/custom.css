@@ -22,18 +22,7 @@
     background: transparent !important;
 }
 
-@font-face {
-    /* 为载入的字体取名字(随意) */
-    font-family: 'YSHST';
-    /* 字体文件地址(相对或者绝对路径都可以) */
-    src: url(/font/优设好身体.ttf);
-    /* 定义加粗样式(加粗多少) */
-    font-weight: normal;
-    /* 定义字体样式(斜体/非斜体) */
-    font-style: normal;
-    /* 定义显示样式 */
-    font-display: block;
-}
+
 
 /* 一级菜单居中 */
 #nav .menus_items {
@@ -122,4 +111,40 @@
 #aside-content > .card-widget.card-info > #card-info-btn {
     background-color: #3eb8be;
     border-radius: 8px;
+}
+
+/* Native loading and stable dimensions keep content visible immediately. */
+#nav { opacity: 1; }
+#web_bg, #page-header, #site-title, #site-subtitle, #content-inner, #footer, #nav.show { animation: none !important; }
+#recent-posts time, #post-meta time { display: inline; }
+.avatar-img img { aspect-ratio: 1; object-fit: cover; }
+#article-container img { height: auto; max-width: 100%; }
+#article-container h2, #article-container h3, #article-container h4 { scroll-margin-top: 80px; }
+#article-container pre { position: relative; padding: 42px 18px 18px; overflow: auto; border-radius: 10px; background: #f3f5f7; line-height: 1.7; }
+#article-container pre code { padding: 0; background: transparent; white-space: pre; font-size: 13px; }
+#article-container .copy-code { position: absolute; top: 8px; right: 10px; padding: 3px 9px; border-radius: 5px; color: #4c4948; background: #fff; font-size: 12px; cursor: pointer; }
+#article-container .table-wrap { max-width: 100%; overflow-x: auto; }
+#article-container .diagram { padding: 16px; margin: 20px 0; border-radius: 12px; background: #fff; }
+#article-container details { margin: 12px 0 24px; }
+#local-search-results { max-height: 65vh; overflow-y: auto; }
+#article-container summary { cursor: pointer; color: #49b1f5; }
+.article-download, .related-article { padding: 16px 0; border-top: 1px solid var(--light-grey); }
+#card-toc .toc-content { max-height: 65vh; overflow-y: auto; }
+#card-toc .toc-level-3 { padding-left: 12px; font-size: 12px; }
+#card-toc .toc-level-4 { padding-left: 20px; font-size: 12px; }
+.image-dialog { width: min(95vw, 1600px); max-height: 92vh; padding: 40px 12px 12px; border: 0; border-radius: 12px; background: #fff; }
+.image-dialog::backdrop { background: #000b; }
+.image-dialog img { display: block; width: 100%; height: auto; }
+.image-dialog button { position: absolute; top: 8px; right: 14px; padding: 4px 10px; border-radius: 5px; cursor: pointer; color: #333; background: #eee; }
+[data-theme="dark"] #article-container pre { background: #20262e; }
+[data-theme="dark"] #article-container .copy-code { color: #ddd; background: #303842; }
+[data-theme="dark"] #article-container .diagram { background: #fff; }
+@media (max-width: 768px) {
+  #post-info .post-title { font-size: 24px; }
+  #post-meta { font-size: 12px; }
+  #article-container { overflow-wrap: anywhere; }
+  #article-container pre { max-width: 100%; }
+}
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition: none !important; }
 }
