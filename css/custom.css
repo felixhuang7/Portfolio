@@ -130,10 +130,10 @@
 #local-search-results { max-height: 65vh; overflow-y: auto; }
 #article-container summary { cursor: pointer; color: #49b1f5; }
 .article-download, .related-article { padding: 16px 0; border-top: 1px solid var(--light-grey); }
-#card-toc .toc-content { max-height: 65vh; overflow-y: auto; font-size: 16px; }
+#card-toc .toc-content { max-height: 65vh; overflow-y: auto; font-size: 14px; }
 #card-toc .toc-level-3 { padding-left: 12px; }
 #card-toc .toc-level-4 { padding-left: 20px; }
-#aside-content #card-toc .toc-content :is(.toc-item, .toc-link, .toc-text) { font-size: 16px; font-weight: 400; }
+#aside-content #card-toc .toc-content :is(.toc-item, .toc-link, .toc-text) { font-size: 14px; font-weight: 400; }
 #aside-content #card-toc .toc-content .toc-link { padding: 5px 10px; border-radius: 10px; transition: background-color .2s ease, color .2s ease, box-shadow .2s ease; }
 #aside-content #card-toc .toc-content .toc-link:hover { color: #2874a4; background: #f0f8ff; }
 #aside-content #card-toc .toc-content .toc-link.active { color: #2874a4; background: #e8f4fd; box-shadow: inset 3px 0 0 #49b1f5; }
@@ -148,15 +148,15 @@
   /* Shrink only the sidebar's reserved space. Its sticky card keeps the full
      column width so TOC text never reflows during the transition. Visible
      overflow lets sticky positioning follow the document's scroll container. */
-  .post #content-inner > #aside-content { display: block; align-self: stretch; flex: 0 0 26%; width: 26%; max-width: 26%; overflow: visible; opacity: 1; transition: flex-basis .75s cubic-bezier(.22,.61,.36,1), width .75s cubic-bezier(.22,.61,.36,1), max-width .75s cubic-bezier(.22,.61,.36,1), margin .75s ease, opacity .55s ease; }
-  .post #aside-content > .sticky_layout { position: sticky; top: 80px; width: 26cqw; transform: translateX(0); transition: transform .75s cubic-bezier(.22,.61,.36,1), top .3s ease; }
+  .post #content-inner > #aside-content { display: block; align-self: stretch; flex: 0 0 calc(26% + 14px); width: calc(26% + 14px); max-width: calc(26% + 14px); overflow: visible; opacity: 1; transition: flex-basis .75s cubic-bezier(.22,.61,.36,1), width .75s cubic-bezier(.22,.61,.36,1), max-width .75s cubic-bezier(.22,.61,.36,1), margin .75s ease, opacity .55s ease; }
+  .post #aside-content > .sticky_layout { position: sticky; top: 80px; width: calc(26cqw + 14px); transform: translateX(0); transition: transform .75s cubic-bezier(.22,.61,.36,1), top .3s ease; }
   .post #aside-content #card-toc .toc-content { max-height: min(65vh, calc(100dvh - 180px)); }
   html.hide-aside .post #content-inner > #aside-content { display: block; flex: 0 0 0; width: 0; max-width: 0; margin-right: 0; padding-left: 0; opacity: 0; pointer-events: none; }
   html.hide-aside .post #aside-content > .sticky_layout { transform: translateX(-18px); }
   html.hide-aside .post #content-inner > #post { width: 80%; max-width: 960px; margin-inline: auto; }
 }
 @media (max-width: 900px) {
-  .post #aside-content #card-toc { right: auto; left: -100%; max-width: calc(100vw - 32px); pointer-events: none; transform-origin: left bottom; }
+  .post #aside-content #card-toc { right: auto; left: -100%; width: calc(100vw - 66px); max-width: calc(100vw - 32px); pointer-events: none; transform-origin: left bottom; }
 }
 /* Move the mobile drawer without scaling its text. */
 @keyframes toc-open {

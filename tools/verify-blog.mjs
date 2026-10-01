@@ -83,7 +83,7 @@ try {
         }
       } else {
         assert.equal(await page.locator('#toc-toggle').getAttribute('aria-expanded'), 'true', 'each article should start with its TOC open')
-        assert.deepEqual(await page.locator('#card-toc .toc-text').evaluateAll(nodes => [...new Set(nodes.map(e => getComputedStyle(e).fontSize))]), ['16px'], 'all TOC levels should use the same larger font')
+        assert.deepEqual(await page.locator('#card-toc .toc-text').evaluateAll(nodes => [...new Set(nodes.map(e => getComputedStyle(e).fontSize))]), ['14px'], 'all TOC levels should use the same font size')
         assert.match(await page.locator('link[href*="/css/custom.css"]').getAttribute('href'), /\?v=[a-f0-9]{12}$/)
         assert.ok(audit.headings > 60)
         if (name === 'harness') assert.equal(audit.diagrams, 5)
@@ -91,6 +91,8 @@ try {
           const tocBox = await page.locator('#card-toc').boundingBox()
           const postBox = await page.locator('#post').boundingBox()
           assert.ok(tocBox.x + tocBox.width <= postBox.x, 'TOC should be on the left')
+          const columnWidth = await page.locator('#content-inner').evaluate(e => e.clientWidth - parseFloat(getComputedStyle(e).paddingLeft) - parseFloat(getComputedStyle(e).paddingRight))
+          assert.ok(Math.abs(tocBox.width - (columnWidth * .26 + 14)) < 1, 'desktop TOC should be wider by one character')
           assert.ok((await page.locator('#aside-content').evaluate(e => getComputedStyle(e).transitionDuration)).includes('0.75s'))
           assert.match(await page.locator('#toc-close').textContent(), /收起/)
           assert.match(await page.locator('#toc-toggle').textContent(), /展开目录/)
@@ -124,6 +126,7 @@ try {
           await page.keyboard.press('Escape')
           assert.equal(await page.locator('dialog[open]').count(), 0)
         } else {
+          assert.ok(Math.abs((await page.locator('#card-toc').boundingBox()).width - (width - 66)) < 1, 'mobile TOC should be wider by one character')
           assert.match(await page.locator('#toc-toggle').textContent(), /展开目录/)
           assert.match(await page.locator('#toc-close').textContent(), /收起/)
           await page.waitForTimeout(650)
