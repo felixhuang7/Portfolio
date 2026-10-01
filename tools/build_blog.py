@@ -155,6 +155,11 @@ def common(page):
     for src in ['/js/blog.js', '/js/effects.js']:
         if not page.select_one(f'script[src="{src}"]'):
             page.body.append(fragment(f'<script defer src="{src}"></script>').script)
+    for src in ['/js/fireworks.min.js', '/js/activate-power-mode.min.js']:
+        if not page.select_one(f'script[src="{src}"]'):
+            page.body.append(fragment(f'<script defer src="{src}"></script>').script)
+    if not page.select_one('script[src="/js/power-mode-init.js"]'):
+        page.body.append(fragment('<script defer src="/js/power-mode-init.js"></script>').script)
     return page
 
 
