@@ -50,6 +50,6 @@ npm.cmd run check
 
 保留入场动画，并使用本地 `js/effects.js` 恢复文章卡片弹入、首页打字和夜间霓虹效果。页面隐藏时暂停打字动画，系统启用“减少动态效果”时关闭装饰动画。
 
-点击烟花和输入抖动已恢复为原站 Butterfly 扩展的效果，脚本放在 `js/fireworks.min.js` 与 `js/activate-power-mode.min.js`，不依赖外部 CDN。
+点击烟花和输入抖动已恢复为原站 Butterfly 扩展的效果，并调整为低饱和配色以适配背景。脚本放在 `js/fireworks.min.js` 与 `js/activate-power-mode.min.js`，不依赖外部 CDN。
 
 如需导出到自定义子目录，可使用 `--base /blog/ --site <博客完整地址> --out <输出目录>`，并一起复制 `css/`、`js/`、`img/`、`vendor/`、`content/posts/` 静态资源。
