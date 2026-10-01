@@ -137,14 +137,29 @@
   .post #content-inner > #aside-content { order: -1; margin: 0 15px 0 0; padding-left: 0; }
   /* Keep the flex container centered in both states so opening the TOC does not
      cause an initial alignment jump before the width transition starts. */
-  .post #content-inner { justify-content: center; }
+  .post #content-inner { justify-content: center; container-type: inline-size; }
   .post #content-inner > #post { width: 74%; max-width: none; margin-inline: 0; transition: width .75s cubic-bezier(.22,.61,.36,1), max-width .75s ease, margin .75s ease; }
-  .post #content-inner > #aside-content { display: block; flex: 0 0 26%; width: 26%; max-width: 26%; overflow: hidden; opacity: 1; transform: translateX(0); transition: flex-basis .75s cubic-bezier(.22,.61,.36,1), width .75s cubic-bezier(.22,.61,.36,1), max-width .75s cubic-bezier(.22,.61,.36,1), margin .75s ease, padding .75s ease, opacity .55s ease, transform .75s ease; }
-  html.hide-aside .post #content-inner > #aside-content { display: block; flex: 0 0 0; width: 0; max-width: 0; margin-right: 0; padding-left: 0; opacity: 0; transform: translateX(-18px); pointer-events: none; }
+  /* Shrink only the sidebar's reserved space. Its sticky card keeps the full
+     column width so TOC text never reflows during the transition. Visible
+     overflow lets sticky positioning follow the document's scroll container. */
+  .post #content-inner > #aside-content { display: block; align-self: stretch; flex: 0 0 26%; width: 26%; max-width: 26%; overflow: visible; opacity: 1; transition: flex-basis .75s cubic-bezier(.22,.61,.36,1), width .75s cubic-bezier(.22,.61,.36,1), max-width .75s cubic-bezier(.22,.61,.36,1), margin .75s ease, opacity .55s ease; }
+  .post #aside-content > .sticky_layout { position: sticky; top: 80px; width: 26cqw; transform: translateX(0); transition: transform .75s cubic-bezier(.22,.61,.36,1), top .3s ease; }
+  .post #aside-content #card-toc .toc-content { max-height: min(65vh, calc(100dvh - 180px)); }
+  html.hide-aside .post #content-inner > #aside-content { display: block; flex: 0 0 0; width: 0; max-width: 0; margin-right: 0; padding-left: 0; opacity: 0; pointer-events: none; }
+  html.hide-aside .post #aside-content > .sticky_layout { transform: translateX(-18px); }
   html.hide-aside .post #content-inner > #post { width: 80%; max-width: 960px; margin-inline: auto; }
 }
 @media (max-width: 900px) {
   .post #aside-content #card-toc { right: auto; left: -100%; max-width: calc(100vw - 32px); pointer-events: none; transform-origin: left bottom; }
+}
+/* Move the mobile drawer without scaling its text. */
+@keyframes toc-open {
+  from { transform: translateX(-18px); opacity: 0; }
+  to { transform: translateX(0); opacity: 1; }
+}
+@keyframes toc-close {
+  from { transform: translateX(0); opacity: 1; }
+  to { transform: translateX(-18px); opacity: 0; }
 }
 .toc-control { display: none; padding: 6px 10px; border-radius: 8px; color: var(--font-color); background: var(--card-bg); cursor: pointer; font-size: 13px; }
 .toc-interactive #toc-close { display: inline-flex; align-items: center; gap: 4px; margin-left: auto; }

@@ -6,6 +6,25 @@ const base = process.env.BLOG_BASE || ''
 const browser = await chromium.launch({ channel: 'msedge', headless: true })
 await mkdir('qa', { recursive: true })
 const reports = []
+// Sample the rendered text throughout both transitions to catch squeeze/reflow.
+const animateToc = async (page, control) => {
+  const frames = await page.evaluate(async control => {
+    const card = document.getElementById('card-toc')
+    const link = card.querySelector('.toc-link')
+    const text = card.textContent
+    const frames = []
+    document.getElementById(control).click()
+    const start = performance.now()
+    do {
+      frames.push({ width: card.getBoundingClientRect().width, height: link.getBoundingClientRect().height, sameText: card.textContent === text })
+      await new Promise(requestAnimationFrame)
+    } while (performance.now() - start < 850)
+    return frames
+  }, control)
+  assert.ok(Math.max(...frames.map(f => f.width)) - Math.min(...frames.map(f => f.width)) < 1, 'TOC card width must stay fixed during toggling')
+  assert.ok(Math.max(...frames.map(f => f.height)) - Math.min(...frames.map(f => f.height)) < 1, 'TOC text must not reflow during toggling')
+  assert.ok(frames.every(f => f.sameText), 'TOC text must stay unchanged')
+}
 try {
   for (const width of [1440, 390]) {
     const context = await browser.newContext({ viewport: { width, height: 900 }, locale: 'zh-CN' })
@@ -67,16 +86,21 @@ try {
           assert.ok((await page.locator('#aside-content').evaluate(e => getComputedStyle(e).transitionDuration)).includes('0.75s'))
           assert.match(await page.locator('#toc-close').textContent(), /收起/)
           assert.match(await page.locator('#toc-toggle').textContent(), /展开目录/)
-          await page.locator('#toc-close').click()
-          await page.waitForTimeout(800)
+          for (const scrollPosition of [3000, 12000]) {
+            await page.evaluate(y => scrollTo(0, y), scrollPosition)
+            await page.waitForTimeout(600)
+            const stickyToc = await page.locator('#card-toc').boundingBox()
+            assert.ok(stickyToc.y >= 60 && stickyToc.y < 100, 'TOC should follow the viewport deep in the article')
+            assert.ok(stickyToc.y + stickyToc.height <= 900, 'sticky TOC should fit in the viewport')
+          }
+          await animateToc(page, 'toc-close')
           assert.equal(await page.locator('#card-toc').evaluate(e => getComputedStyle(e.closest('#aside-content')).opacity), '0')
           assert.equal(await page.locator('#card-toc').evaluate(e => getComputedStyle(e.closest('#aside-content')).pointerEvents), 'none')
           const centered = await page.locator('#post').boundingBox()
           assert.ok(Math.abs(centered.x + centered.width / 2 - width / 2) < 2, 'collapsed article should be centered')
-          await page.locator('#toc-toggle').click()
+          await animateToc(page, 'toc-toggle')
           assert.equal(await page.locator('#card-toc').isVisible(), true)
           assert.match(await page.locator('#toc-toggle').textContent(), /展开目录/)
-          await page.waitForTimeout(800)
           await page.locator('#card-toc .toc-link').nth(4).click()
           await page.waitForTimeout(350)
           assert.ok(await page.evaluate(() => scrollY > 0))
