@@ -118,7 +118,7 @@ def common(page):
         element.attrs.pop('style', None)
     subtitle = page.select_one('#subtitle')
     if subtitle:
-        subtitle.string = '欢迎来到我的个人博客'
+        subtitle.string = '欢迎来到 🍞芝士🍞 的个人博客 🧐🧐🧐'
     author_description = page.select_one('.author-info__description')
     if author_description:
         author_description.decompose()
