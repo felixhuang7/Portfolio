@@ -115,7 +115,8 @@
 
 /* Native loading and stable dimensions keep content visible immediately. */
 #nav { opacity: 1; }
-#web_bg, #page-header, #site-title, #site-subtitle, #content-inner, #footer, #nav.show { animation: none !important; }
+#web_bg { animation: to_show .8s; }
+#content-inner, #footer { animation: bottom-top .5s; }
 #recent-posts time, #post-meta time { display: inline; }
 .avatar-img img { aspect-ratio: 1; object-fit: cover; }
 #article-container img { height: auto; max-width: 100%; }
@@ -132,6 +133,12 @@
 #card-toc .toc-content { max-height: 65vh; overflow-y: auto; }
 #card-toc .toc-level-3 { padding-left: 12px; font-size: 12px; }
 #card-toc .toc-level-4 { padding-left: 20px; font-size: 12px; }
+@media (min-width: 901px) {
+  .post #content-inner > #aside-content { order: -1; margin: 0 15px 0 0; }
+}
+@media (max-width: 900px) {
+  .post #aside-content #card-toc { right: auto; left: -100%; max-width: calc(100vw - 32px); pointer-events: none; transform-origin: left bottom; }
+}
 .image-dialog { width: min(95vw, 1600px); max-height: 92vh; padding: 40px 12px 12px; border: 0; border-radius: 12px; background: #fff; }
 .image-dialog::backdrop { background: #000b; }
 .image-dialog img { display: block; width: 100%; height: auto; }
@@ -139,6 +146,52 @@
 [data-theme="dark"] #article-container pre { background: #20262e; }
 [data-theme="dark"] #article-container .copy-code { color: #ddd; background: #303842; }
 [data-theme="dark"] #article-container .diagram { background: #fff; }
+
+/* Give long article titles more room and let the card grow with its text. */
+#content-inner:has(> #recent-posts) { max-width: 1340px; }
+#recent-posts > .recent-post-item { height: auto; min-height: 18em; align-items: stretch; }
+#recent-posts > .recent-post-item .post_cover { position: relative; flex: 0 0 38%; width: 38%; height: auto; }
+#recent-posts > .recent-post-item .post_cover > a { position: absolute; inset: 0; }
+#recent-posts > .recent-post-item > .recent-post-info { flex: 1; min-width: 0; width: 62%; padding: 28px; align-self: center; }
+#recent-posts > .recent-post-item > .recent-post-info > .article-title { display: block; -webkit-line-clamp: unset; overflow: visible; overflow-wrap: anywhere; }
+@media (min-width: 2000px) {
+  #content-inner:has(> #recent-posts) { max-width: 1600px; }
+}
+@media (max-width: 768px) {
+  #recent-posts > .recent-post-item .post_cover { flex: none; width: 100%; height: 230px; }
+  #recent-posts > .recent-post-item > .recent-post-info { width: 100%; padding: 20px 20px 28px; }
+}
+
+/* Restore the original playful motion with local CSS and browser APIs. */
+.motion-enter-left { --enter-x: -40px; animation: card-bounce .85s both; }
+.motion-enter-right { --enter-x: 40px; animation: card-bounce .85s both; }
+#aside-content > .card-widget.card-info.motion-enter-right { animation: card-bounce .85s both, Gradient 10s ease infinite !important; }
+@keyframes card-bounce {
+  0% { opacity: .6; transform: translateX(var(--enter-x)); }
+  60% { opacity: 1; transform: translateX(calc(var(--enter-x) * -.18)); }
+  80% { transform: translateX(calc(var(--enter-x) * .08)); }
+  100% { opacity: 1; transform: translateX(0); }
+}
+@media (max-width: 900px) {
+  .motion-enter-left { --enter-x: -4px; }
+  .motion-enter-right { --enter-x: 4px; }
+}
+#site-subtitle { min-height: 1.5em; }
+#subtitle.typing::after { content: '|'; margin-left: 3px; animation: typing-caret .8s steps(2) infinite; }
+@keyframes typing-caret { 50% { opacity: 0; } }
+[data-theme="dark"] :is(#site-name, #site-title, #site-subtitle, #post-info, .author-info__name, .author-info__description) { animation: neon-glow 9.6s linear infinite; }
+@keyframes neon-glow {
+  0%, 100% { text-shadow: 0 0 12px #39c5bb; }
+  12.5% { text-shadow: 0 0 12px #f14747; }
+  25% { text-shadow: 0 0 12px #f1a247; }
+  37.5% { text-shadow: 0 0 12px #f1ee47; }
+  50% { text-shadow: 0 0 12px #b347f1; }
+  62.5% { text-shadow: 0 0 12px #1edbff; }
+  75% { text-shadow: 0 0 12px #ed709b; }
+  87.5% { text-shadow: 0 0 12px #5636ed; }
+}
+.effects-canvas { position: fixed; inset: 0; z-index: 1100; width: 100%; height: 100%; pointer-events: none; }
+html.motion-paused *, html.motion-paused *::after { animation-play-state: paused !important; }
 @media (max-width: 768px) {
   #post-info .post-title { font-size: 24px; }
   #post-meta { font-size: 12px; }
@@ -147,4 +200,5 @@
 }
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation: none !important; transition: none !important; }
+  #aside-content > .card-widget.card-info, #aside-content > .card-widget.card-info.motion-enter-right { animation: none !important; }
 }

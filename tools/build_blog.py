@@ -147,8 +147,9 @@ def common(page):
         copyright.string = '©2022 – 2026 By felixhuang7'
     if not page.select_one('link[href="/vendor/fontawesome/css/all.min.css"]'):
         page.head.append(fragment('<link rel="stylesheet" href="/vendor/fontawesome/css/all.min.css">').link)
-    if not page.select_one('script[src="/js/blog.js"]'):
-        page.body.append(fragment('<script defer src="/js/blog.js"></script>').script)
+    for src in ['/js/blog.js', '/js/effects.js']:
+        if not page.select_one(f'script[src="{src}"]'):
+            page.body.append(fragment(f'<script defer src="{src}"></script>').script)
     return page
 
 
