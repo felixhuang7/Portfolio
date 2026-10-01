@@ -134,10 +134,53 @@
 #card-toc .toc-level-3 { padding-left: 12px; font-size: 12px; }
 #card-toc .toc-level-4 { padding-left: 20px; font-size: 12px; }
 @media (min-width: 901px) {
-  .post #content-inner > #aside-content { order: -1; margin: 0 15px 0 0; }
+  .post #content-inner > #aside-content { order: -1; margin: 0 15px 0 0; padding-left: 0; }
+  html.hide-aside .post #content-inner > #post { width: 100%; max-width: 960px; margin-inline: auto; }
 }
 @media (max-width: 900px) {
   .post #aside-content #card-toc { right: auto; left: -100%; max-width: calc(100vw - 32px); pointer-events: none; transform-origin: left bottom; }
+}
+.toc-control { display: none; padding: 6px 10px; border-radius: 8px; color: var(--font-color); background: var(--card-bg); cursor: pointer; font-size: 13px; }
+.toc-interactive #toc-close { display: inline-flex; align-items: center; gap: 4px; margin-left: auto; }
+#card-toc .item-headline { display: flex; align-items: center; gap: 6px; }
+#aside-content #card-toc .toc-percentage { float: none; margin: 0; font-size: 14px; }
+#toc-toggle { position: fixed; left: 16px; bottom: 85px; z-index: 99; box-shadow: var(--card-box-shadow); }
+html.hide-aside .toc-interactive #toc-toggle { display: block; }
+.toc-control:hover { color: #fff; background: #49b1f5; }
+.toc-control:focus-visible { outline: 2px solid #49b1f5; outline-offset: 3px; }
+@media (max-width: 900px) {
+  .toc-interactive #toc-toggle { display: block; }
+}
+
+/* Keep the original envelope artwork local and make it fit any screen. */
+.guestbook { padding: 12px 0 24px; }
+.guestbook-envelope { position: relative; width: min(100%, 530px); margin: 0 auto; padding: 130px 0 155px; isolation: isolate; }
+#article-container .guestbook-envelope > img { position: absolute; width: 100%; margin: 0; bottom: 0; pointer-events: none; }
+.envelope-back { z-index: -1; }
+.envelope-front { z-index: 2; }
+.guestbook-letter { position: relative; width: 92%; margin: 0 auto; padding-bottom: 16px; border-radius: 10px; overflow: hidden; background: var(--card-bg); box-shadow: 0 8px 25px #0002; transform: translateY(30px); transition: transform .6s ease; }
+.guestbook-envelope:is(:hover, :focus-within) .guestbook-letter { transform: translateY(0); }
+#article-container .guestbook-letter .letter-header { display: block; width: 100%; margin: 0; aspect-ratio: 2.4; object-fit: cover; }
+.letter-message { padding: 10px 18px 16px; text-align: center; }
+#article-container .letter-message h2 { padding: 0; margin: 12px 0; font-size: 20px; }
+#article-container .letter-message h2::before { display: none; }
+#article-container .letter-message p { margin: 12px 0; }
+#article-container a.guestbook-contact { display: inline-block; padding: 9px 18px; border-radius: 8px; color: white; background: #3eb8be; text-decoration: none; }
+.contact-note { font-size: 12px; overflow-wrap: anywhere; color: var(--font-color); }
+#article-container .guestbook-letter .letter-line { display: block; width: 90%; margin: 0 auto; }
+.collection-empty { padding: 40px 12px; text-align: center; }
+.collection-empty > i { font-size: 42px; color: #3eb8be; }
+#article-container .collection-empty h2 { padding: 0; }
+#article-container .collection-empty h2::before { display: none; }
+.friend-invite { margin-top: 24px; padding-top: 20px; border-top: 1px solid var(--light-grey); }
+#article-container .flink .flink-list { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr)); gap: 16px; padding: 8px 0; text-align: left; }
+#article-container .flink .flink-list > .flink-list-item { float: none; margin: 0; width: 100% !important; height: auto; min-height: 100px; }
+#article-container .flink .flink-item-desc { height: auto; white-space: normal; overflow: visible; padding-bottom: 16px; }
+@media (max-width: 600px) {
+  .guestbook-envelope { padding: 0; }
+  #article-container .guestbook-envelope > img { display: none; }
+  .guestbook-letter { width: 100%; transform: none; }
+  .letter-message { padding-inline: 12px; }
 }
 .image-dialog { width: min(95vw, 1600px); max-height: 92vh; padding: 40px 12px 12px; border: 0; border-radius: 12px; background: #fff; }
 .image-dialog::backdrop { background: #000b; }

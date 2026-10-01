@@ -116,10 +116,10 @@ def common(page):
         element.attrs.pop('style', None)
     subtitle = page.select_one('#subtitle')
     if subtitle:
-        subtitle.string = 'AI 应用、Agent 工程与后端开发 · 学习与实践'
+        subtitle.string = '欢迎来到我的个人博客'
     author_description = page.select_one('.author-info__description')
     if author_description:
-        author_description.string = 'AI 应用与后端开发 · 记录学习和工程实践'
+        author_description.decompose()
     button = page.select_one('#card-info-btn')
     if button:
         button['href'] = 'https://github.com/felixhuang7'
@@ -167,7 +167,7 @@ def metadata(page, path, title, description='', post=False, home=False):
     if desc is None:
         desc = page.new_tag('meta', attrs={'name': 'description'})
         page.head.append(desc)
-    desc['content'] = description or 'felixhuang7 的 AI 应用、Agent 工程与后端开发笔记。'
+    desc['content'] = description or 'felixhuang7 的个人博客，记录生活、学习与点滴。'
     if post:
         for prop in ['article:published_time', 'article:modified_time']:
             node = page.select_one(f'meta[property="{prop}"]')
@@ -251,12 +251,6 @@ def main():
                     m.decompose()
             write(TEMPLATES / (key + '.html'), str(template))
 
-    # Update utility pages while preserving their content, including subdirectory exports.
-    for path in [ROOT / d / 'index.html' for d in ['Gallery', 'comments', 'link', 'movies', 'music']]:
-        page = common(soup(path.read_text(encoding='utf-8')))
-        metadata(page, '/' + path.parent.name + '/', page.select_one('#site-title').get_text())
-        output(page, path.relative_to(ROOT))
-
     home = common(soup((TEMPLATES / 'home.html').read_text(encoding='utf-8')))
     cards = ''
     for i, p in enumerate(POSTS):
@@ -269,6 +263,16 @@ def main():
     output(metadata(home, '/', '', home=True), 'index.html')
 
     page_template = common(soup((TEMPLATES / 'page.html').read_text(encoding='utf-8')))
+    for route, title in [('comments', '留言板'), ('link', '友链'), ('Gallery', '照片'), ('music', '音乐'), ('movies', '电影')]:
+        page = deepcopy(page_template)
+        content_template = TEMPLATES / (route + '-content.html')
+        if content_template.exists():
+            content = content_template.read_text(encoding='utf-8')
+        else:
+            icons = {'Gallery': 'images', 'music': 'music', 'movies': 'film'}
+            content = f'<div class="collection-empty"><i class="fas fa-{icons[route]}" aria-hidden="true"></i><h2>{title}</h2><p>还没有分享{title}，以后慢慢补上。</p><a href="/">先去看看博客文章 →</a></div>'
+        set_html(page.select_one('#page'), '<div id="article-container">' + content + '</div>')
+        output(metadata(page, '/' + route + '/', title), route + '/index.html')
     indexes = [('archives/index.html', '时间轴', POSTS), ('archives/2026/index.html', '2026 年', POSTS),
                ('archives/2026/10/index.html', '2026 年 10 月', POSTS),
                ('categories/ai-agent/index.html', '分类 - AI 与 Agent', POSTS)]
@@ -289,7 +293,7 @@ def main():
     set_html(category_page.select_one('#page'), '<div class="category-lists"><ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/ai-agent/">AI 与 Agent</a><span class="category-list-count">2</span></li></ul></div>')
     output(metadata(category_page, '/categories/', '分类'), 'categories/index.html')
     about = deepcopy(page_template)
-    set_html(about.select_one('#page'), '<div id="article-container"><h2>关于我</h2><p>我是 felixhuang7，关注 AI 应用、Agent 工程与后端开发。这里整理学习笔记和工程实践。</p><p><a href="https://github.com/felixhuang7" target="_blank" rel="noopener noreferrer">GitHub · felixhuang7</a></p></div>')
+    set_html(about.select_one('#page'), '<div id="article-container"><h2>关于我</h2><p>我是 felixhuang7，欢迎来到我的个人博客。这里记录生活、学习和感兴趣的事。</p><p><a href="https://github.com/felixhuang7" target="_blank" rel="noopener noreferrer">GitHub · felixhuang7</a></p></div>')
     output(metadata(about, '/about/', '关于'), 'about/index.html')
 
     for p in POSTS:
@@ -322,6 +326,8 @@ def main():
         toc += '</ol>'
         set_html(page.select_one('#card-toc .toc-content'), toc)
         page.select_one('#card-toc .toc-content')['class'] = ['toc-content', 'is-expand']
+        page.select_one('#card-toc .item-headline').append(fragment('<button type="button" id="toc-close" class="toc-control" aria-label="收起目录" title="收起目录" aria-controls="card-toc"><i class="fas fa-angle-left" aria-hidden="true"></i> 收起</button>').button)
+        page.body.append(fragment('<button type="button" id="toc-toggle" class="toc-control" aria-controls="card-toc" aria-expanded="true"><i class="fas fa-list-ul" aria-hidden="true"></i> 展开目录</button>').button)
         set_html(page.select_one('#post-info'), f'<h1 class="post-title">{p["title"]}</h1><div id="post-meta"><time datetime="{DATE}T00:00:00+08:00">{DATE}</time> · <a href="/categories/ai-agent/">AI 与 Agent</a> · {p["words"]:,} 字 · {p["minutes"]} 分钟</div>')
         downloads = f'<p class="article-download"><a href="/content/posts/{p["file"]}" download>下载 Markdown 原文</a></p>'
         links = ' · '.join(f'<a class="post-meta__tags" href="/tags/{TAGS[t]}/">{t}</a>' for t in p['tags'])

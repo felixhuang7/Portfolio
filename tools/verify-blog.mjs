@@ -43,6 +43,7 @@ try {
         assert.equal(await page.locator('.recent-post-item').count(), 2)
         assert.equal(await page.locator('#card-info-btn').getAttribute('href'), 'https://github.com/felixhuang7')
         assert.equal(await page.locator('a[href*="zhishimianbao"]').count(), 0)
+        assert.equal(await page.locator('.author-info__description').count(), 0)
         await page.locator('#search-button .search').click()
         await page.locator('#local-search-input input').fill('Harness')
         await page.waitForFunction(() => document.querySelectorAll('.search-result-title').length === 2)
@@ -58,6 +59,17 @@ try {
         assert.ok(audit.headings > 60)
         if (name === 'harness') assert.equal(audit.diagrams, 5)
         if (width === 1440) {
+          const tocBox = await page.locator('#card-toc').boundingBox()
+          const postBox = await page.locator('#post').boundingBox()
+          assert.ok(tocBox.x + tocBox.width <= postBox.x, 'TOC should be on the left')
+          await page.locator('#toc-close').click()
+          await page.waitForTimeout(450)
+          assert.equal(await page.locator('#card-toc').isVisible(), false)
+          const centered = await page.locator('#post').boundingBox()
+          assert.ok(Math.abs(centered.x + centered.width / 2 - width / 2) < 2, 'collapsed article should be centered')
+          await page.locator('#toc-toggle').click()
+          assert.equal(await page.locator('#card-toc').isVisible(), true)
+          await page.waitForTimeout(450)
           await page.locator('#card-toc .toc-link').nth(4).click()
           await page.waitForTimeout(350)
           assert.ok(await page.evaluate(() => scrollY > 0))
@@ -65,12 +77,48 @@ try {
           assert.equal(await page.locator('dialog[open]').count(), 1)
           await page.keyboard.press('Escape')
           assert.equal(await page.locator('dialog[open]').count(), 0)
+        } else {
+          await page.locator('#toc-toggle').click()
+          await page.waitForTimeout(350)
+          assert.equal(await page.locator('#toc-toggle').getAttribute('aria-expanded'), 'true')
+          await page.locator('#toc-close').click()
+          await page.waitForTimeout(350)
+          assert.equal(await page.locator('#toc-toggle').getAttribute('aria-expanded'), 'false')
+          await page.locator('#toc-toggle').click()
+          await page.waitForTimeout(350)
+          await page.locator('#card-toc .toc-link').nth(4).click()
+          await page.waitForTimeout(450)
+          assert.equal(await page.locator('#toc-toggle').getAttribute('aria-expanded'), 'false')
+          assert.ok(await page.evaluate(() => scrollY > 0))
         }
       }
       await page.evaluate(() => document.getElementById('darkmode').click())
       assert.equal(await page.locator('html').getAttribute('data-theme'), 'dark')
       await page.screenshot({ path: `qa/${name}-${width}-dark.png` })
       reports.push({ width, name, ...audit })
+    }
+    for (const path of ['/comments/', '/link/', '/Gallery/', '/music/', '/movies/', '/tags/', '/tags/harness/', '/tags/agent/', '/tags/interview/', '/categories/', '/categories/ai-agent/', '/archives/', '/about/']) {
+      await page.goto(origin + base + path, { waitUntil: 'load' })
+      await page.evaluate(async () => {
+        for (const image of document.images) { image.loading = 'eager'; await image.decode() }
+      })
+      assert.ok((await page.locator('#page, #archive').innerText()).trim().length > 0, `empty page: ${path}`)
+      assert.equal(await page.evaluate(() => document.documentElement.scrollWidth > innerWidth), false, `${width} ${path}: overflow`)
+      if (path === '/comments/') {
+        assert.equal(await page.locator('.guestbook-contact').getAttribute('href'), 'mailto:1677518554@qq.com?subject=%E5%8D%9A%E5%AE%A2%E7%95%99%E8%A8%80')
+        await page.locator('.guestbook-contact').scrollIntoViewIfNeeded()
+        assert.equal(await page.locator('#article-container img[src="/img/favicon.png"]').count(), 0)
+      }
+      if (path === '/link/') {
+        assert.equal(await page.locator('.flink-list-item > a').count(), 2)
+        // Avatars must follow the friend link rather than opening the image dialog.
+        assert.equal(await page.locator('.flink-item-icon img').evaluateAll(images => images.every(image => image.closest('a').target === '_blank')), true)
+      }
+      if (['/comments/', '/link/', '/Gallery/'].includes(path)) {
+        await page.locator('#content-inner').scrollIntoViewIfNeeded()
+        await page.waitForTimeout(600)
+        await page.screenshot({ path: `qa/${path.slice(1, -1)}-${width}.png` })
+      }
     }
     assert.deepEqual(errors, [], `browser errors: ${errors.join('; ')}`)
     assert.deepEqual(external, [], 'external resources requested')

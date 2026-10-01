@@ -2,6 +2,12 @@
 
 `main` 保存完整静态博客，沿用原来的 Butterfly 页面样式。可用任意静态文件服务器预览或托管。
 
+本机博客仓库位于 `D:\code\project\blog`，带独立 `.git`，维护 `main`。`D:\code\project\portfolio` 维护 `portfolio` 分支。推送 `main` 后由已有的 EdgeOne 部署流程发布。
+
+文章左侧目录可直接收起，正文随之居中；左下角按钮可重新展开。留言板保留信封动画，使用邮件联系；友链头像与信封资源本地保存。音乐、照片、电影尚无内容时显示空状态。
+留言板、友链页面正文模板分别在 `tools/templates/comments-content.html` 与 `tools/templates/link-content.html`。
+信封素材沿用原站的 `hexo-butterfly-envelope@1.0.15`，友链图标来自各站原有资源。
+
 ## 新文章
 
 - [AI 应用 Harness 完整架构：面试系统设计版](2026/10/01/harness-architecture/)
