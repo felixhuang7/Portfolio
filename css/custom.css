@@ -168,9 +168,9 @@ html.hide-aside .toc-interactive #toc-toggle { display: block; }
 #article-container a.guestbook-contact { display: inline-block; padding: 9px 18px; border-radius: 8px; color: white; background: #3eb8be; text-decoration: none; }
 .contact-note { font-size: 12px; overflow-wrap: anywhere; color: var(--font-color); }
 #article-container .guestbook-letter .letter-line { display: block; width: 90%; margin: 0 auto; }
-[data-theme="dark"] .guestbook-letter { background: #252d39; border: 1px solid #526175; box-shadow: 0 8px 28px #0006; color: #e3eaf3; }
-[data-theme="dark"] #article-container .letter-message h2 { color: #f3f6fb; }
-[data-theme="dark"] .letter-message .contact-note { color: #c3cfde; }
+[data-theme="dark"] .guestbook-letter { background: #2c2933; border: 1px solid #6b5c70; box-shadow: 0 8px 28px #0007; color: #f1eaf3; }
+[data-theme="dark"] #article-container .letter-message h2 { color: #fff8ff; }
+[data-theme="dark"] .letter-message .contact-note { color: #d8cbdc; }
 [data-theme="dark"] #article-container .guestbook-letter .letter-header { filter: brightness(.9); }
 [data-theme="dark"] #article-container .guestbook-letter .letter-line { filter: none; }
 .collection-empty { padding: 40px 12px; text-align: center; }

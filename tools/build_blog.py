@@ -125,7 +125,11 @@ def common(page):
     button = page.select_one('#card-info-btn')
     if button:
         button['href'] = 'https://github.com/felixhuang7'
-        button.select_one('span').string = '🚗 去康康我的 GitHub 🐙'
+        icon = button.select_one('i')
+        if icon:
+            icon['class'] = ['fab', 'fa-github']
+            icon['aria-hidden'] = 'true'
+        button.select_one('span').string = '🚀 去康康我的 GitHub'
     for link in page.select('a[target="_blank"]'):
         link['rel'] = ['noopener', 'noreferrer']
     for node in page.select('.length-num'):
