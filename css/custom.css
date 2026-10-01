@@ -170,7 +170,7 @@
 .toc-control { display: none; padding: 6px 10px; border-radius: 8px; color: var(--font-color); background: var(--card-bg); cursor: pointer; font-size: 13px; }
 .toc-interactive #toc-close { display: inline-flex; align-items: center; gap: 4px; margin-left: auto; }
 #card-toc .item-headline { display: flex; align-items: center; gap: 6px; }
-#aside-content #card-toc .toc-percentage { float: none; margin: 0; font-size: 14px; }
+#aside-content #card-toc .toc-percentage { display: none; }
 #toc-toggle { position: fixed; left: 16px; bottom: 85px; z-index: 99; box-shadow: var(--card-box-shadow); }
 @media (min-width: 901px) {
   .toc-interactive #toc-toggle { display: block; opacity: 0; transform: translateX(-10px); pointer-events: none; transition: opacity .55s ease, transform .75s ease, background .2s ease; }
