@@ -135,7 +135,9 @@
 #card-toc .toc-level-4 { padding-left: 20px; font-size: 12px; }
 @media (min-width: 901px) {
   .post #content-inner > #aside-content { order: -1; margin: 0 15px 0 0; padding-left: 0; }
-  .post #content-inner { transition: justify-content .75s ease; }
+  /* Keep the flex container centered in both states so opening the TOC does not
+     cause an initial alignment jump before the width transition starts. */
+  .post #content-inner { justify-content: center; }
   .post #content-inner > #post { width: 74%; max-width: none; margin-inline: 0; transition: width .75s cubic-bezier(.22,.61,.36,1), max-width .75s ease, margin .75s ease; }
   .post #content-inner > #aside-content { display: block; flex: 0 0 26%; width: 26%; max-width: 26%; overflow: hidden; opacity: 1; transform: translateX(0); transition: flex-basis .75s cubic-bezier(.22,.61,.36,1), width .75s cubic-bezier(.22,.61,.36,1), max-width .75s cubic-bezier(.22,.61,.36,1), margin .75s ease, padding .75s ease, opacity .55s ease, transform .75s ease; }
   html.hide-aside .post #content-inner > #aside-content { display: block; flex: 0 0 0; width: 0; max-width: 0; margin-right: 0; padding-left: 0; opacity: 0; transform: translateX(-18px); pointer-events: none; }

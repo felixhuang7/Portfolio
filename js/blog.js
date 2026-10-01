@@ -10,7 +10,6 @@ document.addEventListener('DOMContentLoaded', () => {
         ? !document.documentElement.classList.contains('hide-aside')
         : getComputedStyle(toc).pointerEvents !== 'none'
       tocToggle.setAttribute('aria-expanded', String(open))
-      tocToggle.lastChild.textContent = open && !desktop.matches ? ' 收起目录' : ' 展开目录'
       toc.inert = !open
     }
     const setOpen = open => {
