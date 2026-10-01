@@ -496,9 +496,6 @@ document.addEventListener('DOMContentLoaded', function () {
     },
     hideAsideBtn: () => { // Hide aside
       const $htmlDom = document.documentElement.classList
-      $htmlDom.contains('hide-aside')
-        ? saveToLocal.set('aside-status', 'show', 2)
-        : saveToLocal.set('aside-status', 'hide', 2)
       $htmlDom.toggle('hide-aside')
     },
 

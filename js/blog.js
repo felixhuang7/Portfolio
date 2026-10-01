@@ -15,7 +15,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const setOpen = open => {
       if (desktop.matches) {
         document.documentElement.classList.toggle('hide-aside', !open)
-        window.saveToLocal?.set('aside-status', open ? 'show' : 'hide', 2)
       } else if (window.mobileToc) {
         window.mobileToc[open ? 'open' : 'close']()
       }
@@ -30,7 +29,8 @@ document.addEventListener('DOMContentLoaded', () => {
     new MutationObserver(sync).observe(toc, { attributes: true, attributeFilter: ['style'] })
     desktop.addEventListener('change', sync)
     document.body.classList.add('toc-interactive')
-    sync()
+    // Each article starts open; collapsing a TOC only affects this visit.
+    setOpen(true)
   }
   const article = document.getElementById('article-container')
   if (!article) return

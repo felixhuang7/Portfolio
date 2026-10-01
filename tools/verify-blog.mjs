@@ -28,7 +28,11 @@ const animateToc = async (page, control) => {
 try {
   for (const width of [1440, 390]) {
     const context = await browser.newContext({ viewport: { width, height: 900 }, locale: 'zh-CN' })
-    await context.addInitScript(() => localStorage.setItem('theme', JSON.stringify({ value: 'light', expiry: Date.now() + 86400000 })))
+    await context.addInitScript(() => {
+      localStorage.setItem('theme', JSON.stringify({ value: 'light', expiry: Date.now() + 86400000 }))
+      // Simulate a browser carrying the old, global collapsed-sidebar setting.
+      localStorage.setItem('aside-status', JSON.stringify({ value: 'hide', expiry: Date.now() + 86400000 }))
+    })
     const page = await context.newPage()
     const errors = [], external = [], failures = []
     page.on('pageerror', e => errors.push(e.message))
@@ -59,6 +63,7 @@ try {
       assert.equal(audit.hasOverlay, false)
       await page.screenshot({ path: `qa/${name}-${width}.png` })
       if (name === 'home') {
+        assert.equal(await page.locator('#aside-content .card-info').isVisible(), true, 'home profile should ignore an old collapsed TOC preference')
         assert.equal(await page.locator('.recent-post-item').count(), 2)
         assert.equal(await page.locator('#card-info-btn').getAttribute('href'), 'https://github.com/felixhuang7')
         assert.equal(await page.locator('#card-info-btn').innerText(), '🚀 去康康我的 GitHub')
@@ -77,6 +82,7 @@ try {
           await page.locator('#menu-mask').click({ position: { x: 10, y: 300 } })
         }
       } else {
+        assert.equal(await page.locator('#toc-toggle').getAttribute('aria-expanded'), 'true', 'each article should start with its TOC open')
         assert.ok(audit.headings > 60)
         if (name === 'harness') assert.equal(audit.diagrams, 5)
         if (width === 1440) {
@@ -111,6 +117,9 @@ try {
         } else {
           assert.match(await page.locator('#toc-toggle').textContent(), /展开目录/)
           assert.match(await page.locator('#toc-close').textContent(), /收起/)
+          await page.waitForTimeout(650)
+          await page.locator('#toc-close').click()
+          await page.waitForTimeout(550)
           await page.locator('#toc-toggle').click()
           await page.waitForTimeout(100)
           assert.equal(await page.locator('#card-toc').evaluate(e => getComputedStyle(e).animationDuration), '0.55s')

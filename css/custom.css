@@ -133,6 +133,11 @@
 #card-toc .toc-content { max-height: 65vh; overflow-y: auto; }
 #card-toc .toc-level-3 { padding-left: 12px; font-size: 12px; }
 #card-toc .toc-level-4 { padding-left: 20px; font-size: 12px; }
+#aside-content #card-toc .toc-content .toc-link { padding: 5px 10px; border-radius: 10px; transition: background-color .2s ease, color .2s ease, box-shadow .2s ease; }
+#aside-content #card-toc .toc-content .toc-link:hover { color: #397967; background: #eef5f2; }
+#aside-content #card-toc .toc-content .toc-link.active { color: #286451; background: #e3efea; box-shadow: inset 3px 0 0 #7ba994; }
+[data-theme="dark"] #aside-content #card-toc .toc-content .toc-link:hover { color: #bdd9cd; background: #a8cfc110; }
+[data-theme="dark"] #aside-content #card-toc .toc-content .toc-link.active { color: #b9dbcd; background: #253b35; box-shadow: inset 3px 0 0 #7ba994; }
 @media (min-width: 901px) {
   .post #content-inner > #aside-content { order: -1; margin: 0 15px 0 0; padding-left: 0; }
   /* Keep the flex container centered in both states so opening the TOC does not
