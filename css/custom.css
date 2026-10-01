@@ -130,9 +130,9 @@
 #local-search-results { max-height: 65vh; overflow-y: auto; }
 #article-container summary { cursor: pointer; color: #49b1f5; }
 .article-download, .related-article { padding: 16px 0; border-top: 1px solid var(--light-grey); }
-#card-toc .toc-content { max-height: 65vh; overflow-y: auto; }
-#card-toc .toc-level-3 { padding-left: 12px; font-size: 12px; }
-#card-toc .toc-level-4 { padding-left: 20px; font-size: 12px; }
+#card-toc .toc-content { max-height: 65vh; overflow-y: auto; font-size: 14px; }
+#card-toc .toc-level-3 { padding-left: 12px; }
+#card-toc .toc-level-4 { padding-left: 20px; }
 #aside-content #card-toc .toc-content .toc-link { padding: 5px 10px; border-radius: 10px; transition: background-color .2s ease, color .2s ease, box-shadow .2s ease; }
 #aside-content #card-toc .toc-content .toc-link:hover { color: #2874a4; background: #f0f8ff; }
 #aside-content #card-toc .toc-content .toc-link.active { color: #2874a4; background: #e8f4fd; box-shadow: inset 3px 0 0 #49b1f5; }
