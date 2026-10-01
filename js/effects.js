@@ -1,5 +1,4 @@
-// Local replacements for the old WOW and Typed effects. Fireworks and power mode
-// are restored from the original Butterfly extension and served locally.
+// Local replacements for the old WOW, Typed, fireworks and power-mode effects.
 document.addEventListener('DOMContentLoaded', () => {
   const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)')
   const active = () => !reducedMotion.matches && !document.hidden
@@ -43,10 +42,84 @@ document.addEventListener('DOMContentLoaded', () => {
   }, { threshold: .08 })
   document.querySelectorAll('.recent-post-item, .card-widget, .pagination').forEach(card => reveal.observe(card))
 
+  // Allocate a canvas on the first interaction; request frames only while particles exist.
+  const colors = ['#39c5bb', '#f14747', '#f1a247', '#b347f1', '#1edbff', '#ed709b']
+  let canvas, context, frame, previousTime = 0, lastInput = 0
+  let particles = []
+  const prepare = () => {
+    if (!canvas) {
+      canvas = document.createElement('canvas')
+      canvas.className = 'effects-canvas fireworks'
+      canvas.setAttribute('aria-hidden', 'true')
+      document.body.append(canvas)
+      context = canvas.getContext('2d')
+    }
+    if (!context) return false
+    const scale = Math.min(devicePixelRatio || 1, 1.5)
+    const width = Math.round(innerWidth * scale), height = Math.round(innerHeight * scale)
+    if (canvas.width !== width || canvas.height !== height) {
+      canvas.width = width
+      canvas.height = height
+      context.setTransform(scale, 0, 0, scale, 0, 0)
+    }
+    return true
+  }
+  const draw = time => {
+    frame = undefined
+    if (!active()) { particles = []; context?.clearRect(0, 0, innerWidth, innerHeight); return }
+    const step = Math.min((time - previousTime) / 16.67 || 1, 2)
+    previousTime = time
+    context.clearRect(0, 0, innerWidth, innerHeight)
+    particles = particles.filter(particle => particle.life > 0)
+    for (const particle of particles) {
+      particle.x += particle.vx * step
+      particle.y += particle.vy * step
+      particle.vy += .045 * step
+      particle.life -= step
+      context.globalAlpha = Math.max(0, particle.life / particle.total)
+      context.fillStyle = particle.color
+      context.beginPath()
+      context.arc(particle.x, particle.y, particle.radius, 0, Math.PI * 2)
+      context.fill()
+    }
+    context.globalAlpha = 1
+    if (particles.length) frame = requestAnimationFrame(draw)
+    else { context.clearRect(0, 0, innerWidth, innerHeight); previousTime = 0 }
+  }
+  const burst = (x, y, amount, speed) => {
+    if (!active() || !prepare()) return
+    particles = particles.slice(-120)
+    for (let i = 0; i < amount; i++) {
+      const angle = Math.random() * Math.PI * 2
+      const velocity = (.4 + Math.random()) * speed
+      const life = 25 + Math.random() * 20
+      particles.push({ x, y, vx: Math.cos(angle) * velocity, vy: Math.sin(angle) * velocity,
+        life, total: life, radius: 1.5 + Math.random() * 2, color: colors[i % colors.length] })
+    }
+    if (!frame) frame = requestAnimationFrame(draw)
+  }
+  document.addEventListener('pointerdown', event => {
+    if (event.button !== 0) return
+    burst(event.clientX, event.clientY, innerWidth < 768 ? 16 : 28, 3)
+  }, { passive: true })
+  document.addEventListener('input', event => {
+    const input = event.target
+    if (!active() || !input.matches('input:not([type="password"]), textarea, [contenteditable="true"]')) return
+    if (performance.now() - lastInput < 70) return
+    lastInput = performance.now()
+    const rect = input.getBoundingClientRect()
+    burst(rect.left + Math.min(rect.width - 12, 14 + (input.value?.length || 0) * 9), rect.top + rect.height / 2, 10, 1.5)
+    input.animate([{ transform: 'translateX(0)' }, { transform: 'translateX(-1px)' },
+      { transform: 'translateX(1px)' }, { transform: 'translateX(0)' }], { duration: 130 })
+  }, { passive: true })
   const pause = () => {
     clearTimeout(typingTimer)
     document.documentElement.classList.toggle('motion-paused', document.hidden)
     if (!active()) {
+      cancelAnimationFrame(frame)
+      frame = undefined
+      particles = []
+      context?.clearRect(0, 0, innerWidth, innerHeight)
       if (reducedMotion.matches && subtitle) { subtitle.classList.remove('typing'); subtitle.textContent = fallback }
     } else if (subtitle) typingTimer = setTimeout(type, 1000)
   }
