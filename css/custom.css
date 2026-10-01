@@ -190,19 +190,12 @@ html.hide-aside .toc-interactive #toc-toggle { display: block; }
 [data-theme="dark"] #article-container .copy-code { color: #ddd; background: #303842; }
 [data-theme="dark"] #article-container .diagram { background: #fff; }
 
-/* Give long article titles more room and let the card grow with its text. */
-#content-inner:has(> #recent-posts) { max-width: 1340px; }
-#recent-posts > .recent-post-item { height: auto; min-height: 18em; align-items: stretch; }
-#recent-posts > .recent-post-item .post_cover { position: relative; flex: 0 0 38%; width: 38%; height: auto; }
-#recent-posts > .recent-post-item .post_cover > a { position: absolute; inset: 0; }
-#recent-posts > .recent-post-item > .recent-post-info { flex: 1; min-width: 0; width: 62%; padding: 28px; align-self: center; }
-#recent-posts > .recent-post-item > .recent-post-info > .article-title { display: block; -webkit-line-clamp: unset; overflow: visible; overflow-wrap: anywhere; }
-@media (min-width: 2000px) {
-  #content-inner:has(> #recent-posts) { max-width: 1600px; }
-}
+/* Keep the original card dimensions; split each title at a meaningful phrase. */
+#recent-posts > .recent-post-item > .recent-post-info { container-type: inline-size; }
+#recent-posts > .recent-post-item > .recent-post-info > .article-title { display: block; -webkit-line-clamp: unset; overflow: visible; font-size: clamp(16px, 6cqw, 24px); }
+.article-title .title-line { display: block; white-space: nowrap; }
 @media (max-width: 768px) {
-  #recent-posts > .recent-post-item .post_cover { flex: none; width: 100%; height: 230px; }
-  #recent-posts > .recent-post-item > .recent-post-info { width: 100%; padding: 20px 20px 28px; }
+  #recent-posts > .recent-post-item > .recent-post-info > .article-title { font-size: clamp(16px, 6cqw, 20px); }
 }
 
 /* Restore the original playful motion with local CSS and browser APIs. */

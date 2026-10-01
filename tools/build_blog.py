@@ -18,10 +18,12 @@ TEMPLATES = ROOT / 'tools' / 'templates'
 POSTS = [
     dict(slug='harness-architecture', file='01_AI应用Harness完整架构.md',
          title='AI 应用 Harness 完整架构：面试系统设计版', tags=['Harness', 'Agent'],
+         title_lines=('AI 应用 Harness 完整架构：', '面试系统设计版'),
          cover='01_harness_layers_v4',
          description='从交互入口到网关、上下文、工具与模型，系统梳理 Agent 执行闭环、记忆、权限、恢复和评测。'),
     dict(slug='agent-interview', file='02_AI应用与Agent开发面试题及优质回答.md',
          title='AI 应用与 Agent 开发面试题及优质回答', tags=['Agent', '面试'],
+         title_lines=('AI 应用与 Agent 开发', '面试题及优质回答'),
          cover='02_agent_loop_final',
          description='64 道面试题，覆盖 Harness、MCP、Skill、RAG、多 Agent、性能、安全与项目表达，每题包含回答、追问和失分点。'),
 ]
@@ -123,7 +125,7 @@ def common(page):
     button = page.select_one('#card-info-btn')
     if button:
         button['href'] = 'https://github.com/felixhuang7'
-        button.select_one('span').string = '访问我的 GitHub'
+        button.select_one('span').string = '🚗 去康康我的 GitHub 🐙'
     for link in page.select('a[target="_blank"]'):
         link['rel'] = ['noopener', 'noreferrer']
     for node in page.select('.length-num'):
@@ -254,9 +256,10 @@ def main():
     home = common(soup((TEMPLATES / 'home.html').read_text(encoding='utf-8')))
     cards = ''
     for i, p in enumerate(POSTS):
+        title = ''.join(f'<span class="title-line">{escape(line)}</span>' for line in p['title_lines'])
         cards += f'''<div class="recent-post-item"><div class="post_cover {'left' if i == 0 else 'right'}"><a href="{p['url']}">
         <img class="post_bg" src="/img/posts/{p['cover']}-thumb.webp" alt="{p['title']}" width="560" height="350" loading="lazy" decoding="async"></a></div>
-        <div class="recent-post-info"><a class="article-title" href="{p['url']}">{p['title']}</a>
+        <div class="recent-post-info"><a class="article-title" href="{p['url']}" aria-label="{p['title']}">{title}</a>
         <div class="article-meta-wrap"><time datetime="{DATE}T00:00:00+08:00">{DATE}</time> · AI 与 Agent · {p['minutes']} 分钟</div>
         <div class="content">{p['description']}</div></div></div>'''
     set_html(home.select_one('#recent-posts'), cards)
