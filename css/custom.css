@@ -135,7 +135,11 @@
 #card-toc .toc-level-4 { padding-left: 20px; font-size: 12px; }
 @media (min-width: 901px) {
   .post #content-inner > #aside-content { order: -1; margin: 0 15px 0 0; padding-left: 0; }
-  html.hide-aside .post #content-inner > #post { width: 100%; max-width: 960px; margin-inline: auto; }
+  .post #content-inner { transition: justify-content .45s ease; }
+  .post #content-inner > #post { width: 74%; max-width: none; margin-inline: 0; transition: width .45s cubic-bezier(.22,.61,.36,1), max-width .45s ease, margin .45s ease; }
+  .post #content-inner > #aside-content { display: block; flex: 0 0 26%; width: 26%; max-width: 26%; overflow: hidden; opacity: 1; transform: translateX(0); transition: flex-basis .45s cubic-bezier(.22,.61,.36,1), width .45s cubic-bezier(.22,.61,.36,1), max-width .45s cubic-bezier(.22,.61,.36,1), margin .45s ease, padding .45s ease, opacity .3s ease, transform .45s ease; }
+  html.hide-aside .post #content-inner > #aside-content { display: block; flex: 0 0 0; width: 0; max-width: 0; margin-right: 0; padding-left: 0; opacity: 0; transform: translateX(-18px); pointer-events: none; }
+  html.hide-aside .post #content-inner > #post { width: 80%; max-width: 960px; margin-inline: auto; }
 }
 @media (max-width: 900px) {
   .post #aside-content #card-toc { right: auto; left: -100%; max-width: calc(100vw - 32px); pointer-events: none; transform-origin: left bottom; }
@@ -145,7 +149,10 @@
 #card-toc .item-headline { display: flex; align-items: center; gap: 6px; }
 #aside-content #card-toc .toc-percentage { float: none; margin: 0; font-size: 14px; }
 #toc-toggle { position: fixed; left: 16px; bottom: 85px; z-index: 99; box-shadow: var(--card-box-shadow); }
-html.hide-aside .toc-interactive #toc-toggle { display: block; }
+@media (min-width: 901px) {
+  .toc-interactive #toc-toggle { display: block; opacity: 0; transform: translateX(-10px); pointer-events: none; transition: opacity .3s ease, transform .45s ease, background .2s ease; }
+  html.hide-aside .toc-interactive #toc-toggle { opacity: 1; transform: translateX(0); pointer-events: auto; }
+}
 .toc-control:hover { color: #fff; background: #49b1f5; }
 .toc-control:focus-visible { outline: 2px solid #49b1f5; outline-offset: 3px; }
 @media (max-width: 900px) {
