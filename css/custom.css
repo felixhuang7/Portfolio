@@ -123,6 +123,15 @@
 #article-container h2, #article-container h3, #article-container h4 { scroll-margin-top: 80px; }
 #article-container pre { position: relative; padding: 42px 18px 18px; overflow: auto; border-radius: 10px; background: #f3f5f7; line-height: 1.7; }
 #article-container pre code { padding: 0; background: transparent; white-space: pre; font-size: 13px; }
+#html, html { scrollbar-width: thin; scrollbar-color: rgba(73,177,245,.9) transparent; }
+html::-webkit-scrollbar { width: 7px; height: 7px; }
+html::-webkit-scrollbar-track { background: transparent; }
+html::-webkit-scrollbar-thumb { border: 2px solid transparent; border-radius: 999px; background: rgba(73,177,245,.9); background-clip: padding-box; }
+html[data-theme="dark"]::-webkit-scrollbar-thumb { background: rgba(112,198,245,.85); background-clip: padding-box; }
+#card-toc .toc-content { scrollbar-width: thin; scrollbar-color: rgba(73,177,245,.75) transparent; }
+#card-toc .toc-content::-webkit-scrollbar { width: 6px; }
+#card-toc .toc-content::-webkit-scrollbar-track { background: transparent; }
+#card-toc .toc-content::-webkit-scrollbar-thumb { border-radius: 999px; background: rgba(73,177,245,.75); }
 #article-container .copy-code { position: absolute; top: 8px; right: 10px; padding: 3px 9px; border-radius: 5px; color: #4c4948; background: #fff; font-size: 12px; cursor: pointer; }
 #article-container .table-wrap { max-width: 100%; overflow-x: auto; }
 #article-container .diagram { padding: 16px; margin: 20px 0; border-radius: 12px; background: #fff; }
@@ -172,6 +181,9 @@
 #card-toc .item-headline { display: flex; align-items: center; gap: 6px; }
 #aside-content #card-toc .toc-percentage { display: none; }
 #toc-toggle { position: fixed; left: 16px; bottom: 85px; z-index: 99; box-shadow: var(--card-box-shadow); }
+#rightside_config .fa-cog { animation: none; }
+#rightside_config:hover .fa-cog, #rightside_config:focus-visible .fa-cog { animation: cog-hover-spin .8s linear infinite; }
+@keyframes cog-hover-spin { to { transform: rotate(360deg); } }
 @media (min-width: 901px) {
   .toc-interactive #toc-toggle { display: block; opacity: 0; transform: translateX(-10px); pointer-events: none; transition: opacity .55s ease, transform .75s ease, background .2s ease; }
   html.hide-aside .toc-interactive #toc-toggle { opacity: 1; transform: translateX(0); pointer-events: auto; }

@@ -70,6 +70,16 @@ try {
         assert.equal(await page.locator('#card-info-btn .fa-github').count(), 0)
         assert.equal(await page.locator('a[href*="zhishimianbao"]').count(), 0)
         assert.equal(await page.locator('.author-info__description').count(), 0)
+        if (width === 1440) {
+          await page.evaluate(() => scrollTo(0, Math.min(1000, document.body.scrollHeight)))
+          await page.waitForTimeout(350)
+          const gear = page.locator('#rightside_config .fa-cog')
+          assert.equal(await gear.evaluate(e => getComputedStyle(e).animationName), 'none', 'settings gear should be still before hover')
+          await page.locator('#rightside_config').hover()
+          await page.waitForTimeout(80)
+          assert.equal(await gear.evaluate(e => getComputedStyle(e).animationName), 'cog-hover-spin', 'settings gear should rotate on hover')
+          assert.equal(await page.evaluate(() => getComputedStyle(document.documentElement, '::-webkit-scrollbar-track').backgroundColor), 'rgba(0, 0, 0, 0)')
+        }
         await page.locator('#search-button .search').click()
         await page.locator('#local-search-input input').fill('Harness')
         await page.waitForFunction(() => document.querySelectorAll('.search-result-title').length === 2)
