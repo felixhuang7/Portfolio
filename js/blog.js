@@ -1,5 +1,83 @@
 // Small local enhancements; initial content remains available without JavaScript.
 document.addEventListener('DOMContentLoaded', () => {
+  // Preserve native document scrolling; replace only its desktop scrollbar UI.
+  const scrollbarMedia = matchMedia('(hover: hover) and (pointer: fine) and (forced-colors: none)')
+  const root = document.documentElement
+  const scrollbar = document.createElement('div')
+  scrollbar.className = 'page-scrollbar'
+  scrollbar.hidden = true
+  scrollbar.tabIndex = 0
+  scrollbar.setAttribute('role', 'scrollbar')
+  scrollbar.setAttribute('aria-label', '页面滚动')
+  scrollbar.setAttribute('aria-orientation', 'vertical')
+  scrollbar.setAttribute('aria-controls', 'body-wrap')
+  scrollbar.setAttribute('aria-valuemin', '0')
+  scrollbar.setAttribute('aria-valuemax', '100')
+  const thumb = document.createElement('div')
+  thumb.className = 'page-scrollbar-thumb'
+  scrollbar.append(thumb)
+  document.body.append(scrollbar)
+  let frame = 0
+  let geometry = { range: 0, travel: 0, height: 0 }
+  let drag = null
+  const updateScrollbar = () => {
+    frame = 0
+    const viewport = root.clientHeight
+    const range = Math.max(0, root.scrollHeight - viewport)
+    scrollbar.hidden = !scrollbarMedia.matches || !range || getComputedStyle(document.body).overflowY === 'hidden'
+    if (scrollbar.hidden) return
+    const track = scrollbar.clientHeight
+    const height = Math.min(track, Math.max(28, track * viewport / root.scrollHeight))
+    const travel = track - height
+    const progress = Math.max(0, Math.min(1, window.scrollY / range))
+    geometry = { range, travel, height }
+    thumb.style.height = `${height}px`
+    thumb.style.transform = `translateY(${progress * travel}px)`
+    scrollbar.setAttribute('aria-valuenow', String(Math.round(progress * 100)))
+  }
+  const scheduleScrollbar = () => {
+    if (!frame) frame = requestAnimationFrame(updateScrollbar)
+  }
+  const syncScrollbar = () => {
+    root.classList.toggle('overlay-scrollbar', scrollbarMedia.matches)
+    scheduleScrollbar()
+  }
+  scrollbar.addEventListener('pointerdown', event => {
+    if (event.button !== 0 || !geometry.travel) return
+    event.preventDefault()
+    scrollbar.focus({ preventScroll: true })
+    if (event.target !== thumb) {
+      const position = event.clientY - scrollbar.getBoundingClientRect().top - geometry.height / 2
+      window.scrollTo({ top: position / geometry.travel * geometry.range, behavior: 'instant' })
+    }
+    drag = { y: event.clientY, scroll: window.scrollY }
+    scrollbar.setPointerCapture(event.pointerId)
+    scrollbar.classList.add('dragging')
+  })
+  scrollbar.addEventListener('pointermove', event => {
+    if (!drag || !geometry.travel) return
+    window.scrollTo({ top: drag.scroll + (event.clientY - drag.y) * geometry.range / geometry.travel, behavior: 'instant' })
+  })
+  const endDrag = () => {
+    drag = null
+    scrollbar.classList.remove('dragging')
+  }
+  scrollbar.addEventListener('pointerup', endDrag)
+  scrollbar.addEventListener('pointercancel', endDrag)
+  scrollbar.addEventListener('lostpointercapture', endDrag)
+  scrollbar.addEventListener('keydown', event => {
+    const destinations = { ArrowDown: scrollY + 48, ArrowUp: scrollY - 48, PageDown: scrollY + innerHeight * .9, PageUp: scrollY - innerHeight * .9, Home: 0, End: geometry.range }
+    if (!(event.key in destinations)) return
+    event.preventDefault()
+    window.scrollTo({ top: destinations[event.key], behavior: 'instant' })
+  })
+  window.addEventListener('scroll', scheduleScrollbar, { passive: true })
+  window.addEventListener('resize', scheduleScrollbar)
+  new ResizeObserver(scheduleScrollbar).observe(document.body)
+  new MutationObserver(scheduleScrollbar).observe(document.body, { attributes: true, attributeFilter: ['style', 'class'] })
+  scrollbarMedia.addEventListener('change', syncScrollbar)
+  syncScrollbar()
+
   const toc = document.getElementById('card-toc')
   const tocClose = document.getElementById('toc-close')
   const tocToggle = document.getElementById('toc-toggle')

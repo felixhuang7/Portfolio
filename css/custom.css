@@ -123,15 +123,19 @@
 #article-container h2, #article-container h3, #article-container h4 { scroll-margin-top: 80px; }
 #article-container pre { position: relative; padding: 42px 18px 18px; overflow: auto; border-radius: 10px; background: #f3f5f7; line-height: 1.7; }
 #article-container pre code { padding: 0; background: transparent; white-space: pre; font-size: 13px; }
-#html, html { scrollbar-width: thin; scrollbar-color: rgba(73,177,245,.9) transparent; }
-html::-webkit-scrollbar { width: 7px; height: 7px; }
-html::-webkit-scrollbar-track { background: transparent; }
-html::-webkit-scrollbar-thumb { border: 2px solid transparent; border-radius: 999px; background: rgba(73,177,245,.9); background-clip: padding-box; }
-html[data-theme="dark"]::-webkit-scrollbar-thumb { background: rgba(112,198,245,.85); background-clip: padding-box; }
-#card-toc .toc-content { scrollbar-width: thin; scrollbar-color: rgba(73,177,245,.75) transparent; }
-#card-toc .toc-content::-webkit-scrollbar { width: 6px; }
-#card-toc .toc-content::-webkit-scrollbar-track { background: transparent; }
-#card-toc .toc-content::-webkit-scrollbar-thumb { border-radius: 999px; background: rgba(73,177,245,.75); }
+/* The desktop page scrollbar overlays the background instead of reserving a
+   native gutter. Keep a native fallback for touch, forced colors and no JS. */
+html, #card-toc .toc-content { scrollbar-width: thin; scrollbar-color: rgba(140,140,140,.4) transparent; }
+html::-webkit-scrollbar, #card-toc .toc-content::-webkit-scrollbar { width: 7px; height: 7px; background: transparent; }
+html::-webkit-scrollbar-track, #card-toc .toc-content::-webkit-scrollbar-track { background: transparent; }
+html::-webkit-scrollbar-thumb, #card-toc .toc-content::-webkit-scrollbar-thumb { border-radius: 999px; background: rgba(140,140,140,.4); }
+html.overlay-scrollbar { scrollbar-width: none; }
+html.overlay-scrollbar::-webkit-scrollbar { display: none; width: 0; height: 0; }
+.page-scrollbar { position: fixed; z-index: 100; top: 4px; right: 0; bottom: 4px; width: 12px; background: transparent; touch-action: none; user-select: none; }
+.page-scrollbar[hidden] { display: none; }
+.page-scrollbar-thumb { position: absolute; top: 0; right: 3px; width: 6px; min-height: 28px; border-radius: 999px; background: rgba(140,140,140,.4); transition: background-color .2s ease; }
+.page-scrollbar:hover .page-scrollbar-thumb, .page-scrollbar.dragging .page-scrollbar-thumb, .page-scrollbar:focus-visible .page-scrollbar-thumb { background: rgba(140,140,140,.65); }
+.page-scrollbar:focus-visible { outline: 1px solid #49b1f5; outline-offset: -1px; border-radius: 999px; }
 #article-container .copy-code { position: absolute; top: 8px; right: 10px; padding: 3px 9px; border-radius: 5px; color: #4c4948; background: #fff; font-size: 12px; cursor: pointer; }
 #article-container .table-wrap { max-width: 100%; overflow-x: auto; }
 #article-container .diagram { padding: 16px; margin: 20px 0; border-radius: 12px; background: #fff; }
