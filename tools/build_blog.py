@@ -229,12 +229,14 @@ def output(page, path):
   }
 })();"""
     page.head.select_one('meta[charset]').insert_after(bootstrap)
-    # Discover the shared hero image before waiting for the stylesheets.
-    page.head.append(page.new_tag('link', rel='preload', attrs={'as': 'image', 'href': '/img/background.webp', 'fetchpriority': 'high'}))
+    # The page background joins the image phase after the first content paint.
+    background = versioned('/img/background.webp')
+    if page.select_one('#web_bg'):
+        page.select_one('#web_bg')['data-background'] = background
     # Version every cached resource, including icons and images.
     for node, attr in [(node, 'href') for node in page.select('link[href]')] + [(node, 'src') for node in page.select('script[src], img[src]')]:
         node[attr] = versioned(node[attr])
-    for image in list(page.select('#article-container img[src^="/img/posts/"], #article-container img[src^="/img/diagrams/"], .recent-post-item img')):
+    for image in list(page.select('img[src^="/img/"]')):
         if image['src'].split('?', 1)[0].endswith('.svg'):
             svg = ET.parse(ROOT / image['src'].split('?', 1)[0].lstrip('/')).getroot()
             if svg.get('viewBox'):
@@ -247,16 +249,16 @@ def output(page, path):
         image['src'] = 'data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs='
         if image.get('width') and image.get('height'):
             image['style'] = image.get('style', '') + f';aspect-ratio:{image["width"]}/{image["height"]}'
-        # The observer controls the distance; do not add the browser's own delay.
+        # The background queue controls timing; do not add native lazy delays.
         image['loading'] = 'eager'
-    page.head.append(fragment('<noscript><style>img[data-src] { display: none !important; }</style></noscript>').noscript)
+    page.head.append(fragment(f'<noscript><style>img[data-src] {{ display: none !important; }} #web_bg {{ background-image: url("{background}"); }}</style></noscript>').noscript)
     loader = page.new_tag('script', id='page-loading')
     loader.string = (ROOT / 'js/loading.js').read_text(encoding='utf-8')
     page.body.append(loader)
     # root-relative paths support both a dedicated blog and /blog beside Portfolio.
     if BASE != '/':
-        for node in page.select('[href], [src], [data-src]'):
-            for attr in ['href', 'src', 'data-src']:
+        for node in page.select('[href], [src], [data-src], [data-background]'):
+            for attr in ['href', 'src', 'data-src', 'data-background']:
                 value = node.get(attr, '')
                 if value.startswith('/') and not value.startswith('//'):
                     node[attr] = BASE.rstrip('/') + value
@@ -264,6 +266,9 @@ def output(page, path):
             text = (script.string or '').replace("root: '/'", f"root: '{BASE}'")
             text = text.replace('"path":"/search.xml"', f'"path":"{BASE}search.xml"')
             script.string = text
+        fallback_style = page.select_one('noscript style')
+        if fallback_style:
+            fallback_style.string = fallback_style.get_text().replace('url("/img/', f'url("{BASE}img/')
     write(OUT / path, str(page))
 
 

@@ -1,20 +1,43 @@
 // Inline at the end of the document: start without waiting for deferred scripts.
 (() => {
-  const images = document.querySelectorAll('img[data-src]')
-  const load = image => {
-    image.src = image.dataset.src
-    image.removeAttribute('data-src')
-  }
-  if ('IntersectionObserver' in window) {
-    const observer = new IntersectionObserver(entries => {
-      for (const entry of entries) {
-        if (!entry.isIntersecting) continue
-        load(entry.target)
-        observer.unobserve(entry.target)
+  // Let the browser paint the text/layout first, then load every page image.
+  // Visible images go first; three workers keep background downloads bounded.
+  const startImages = () => {
+    const background = document.getElementById('web_bg')
+    if (background?.dataset.background) {
+      background.style.setProperty('--page-background', `url("${background.dataset.background}")`)
+    }
+    const visible = image => {
+      const rect = image.getBoundingClientRect()
+      return rect.width > 0 && rect.height > 0 && rect.bottom > 0 && rect.top < innerHeight
+    }
+    const images = [...document.querySelectorAll('img[data-src]')]
+      .sort((a, b) => Number(visible(b)) - Number(visible(a)))
+    const load = image => new Promise(resolve => {
+      const finish = () => {
+        clearTimeout(timeout)
+        image.removeEventListener('load', finish)
+        image.removeEventListener('error', finish)
+        resolve()
       }
-    }, { rootMargin: '300px 0px' })
-    images.forEach(image => observer.observe(image))
-  } else images.forEach(load)
+      // One stalled image must not hold the remaining background queue forever.
+      const timeout = setTimeout(finish, 8000)
+      image.addEventListener('load', finish)
+      image.addEventListener('error', finish)
+      image.fetchPriority = visible(image) ? 'auto' : 'low'
+      image.src = image.dataset.src
+      image.removeAttribute('data-src')
+      if (image.complete) finish()
+    })
+    const worker = async () => {
+      while (images.length) await load(images.shift())
+    }
+    for (let i = 0; i < 3; i++) worker()
+  }
+  requestAnimationFrame(() => requestAnimationFrame(() => {
+    if ('requestIdleCallback' in window) requestIdleCallback(startImages, { timeout: 300 })
+    else setTimeout(startImages, 0)
+  }))
 
   // Prepare only a link the visitor shows interest in; leave navigation native.
   const connection = navigator.connection

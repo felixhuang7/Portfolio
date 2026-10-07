@@ -44,7 +44,7 @@ try {
       await page.evaluate(() => document.fonts.ready)
       await page.evaluate(async () => {
         for (const image of document.images) {
-          // The focused loading check tests scroll-triggered requests separately.
+          // The focused loading check tests first paint/background timing separately.
           if (image.dataset.src) image.src = image.dataset.src
           image.loading = 'eager'
           await image.decode().catch(() => {})
@@ -171,7 +171,11 @@ try {
     for (const path of ['/comments/', '/link/', '/Gallery/', '/music/', '/movies/', '/tags/', '/tags/harness/', '/tags/agent/', '/tags/interview/', '/categories/', '/categories/ai-agent/', '/archives/', '/about/']) {
       await page.goto(origin + base + path, { waitUntil: 'load' })
       await page.evaluate(async () => {
-        for (const image of document.images) { image.loading = 'eager'; await image.decode() }
+        for (const image of document.images) {
+          if (image.dataset.src) image.src = image.dataset.src
+          image.loading = 'eager'
+          await image.decode()
+        }
       })
       assert.ok((await page.locator('#page, #archive').innerText()).trim().length > 0, `empty page: ${path}`)
       assert.equal(await page.evaluate(() => document.documentElement.scrollWidth > innerWidth), false, `${width} ${path}: overflow`)
