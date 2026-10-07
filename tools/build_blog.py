@@ -191,6 +191,19 @@ def metadata(page, path, title, description='', post=False, home=False):
 
 
 def output(page, path):
+    # Set the scrollbar mode before the first paint, even on a cold/slow load.
+    # Keep the charset first and restore native controls if blog.js fails to load.
+    bootstrap = page.new_tag('script', id='scrollbar-bootstrap')
+    bootstrap.string = """(() => {
+  const root = document.documentElement;
+  if (matchMedia('(hover: hover) and (pointer: fine) and (forced-colors: none)').matches) {
+    root.classList.add('overlay-scrollbar');
+    window.addEventListener('load', () => {
+      if (!document.querySelector('.page-scrollbar')) root.classList.remove('overlay-scrollbar');
+    }, { once: true });
+  }
+})();"""
+    page.head.select_one('meta[charset]').insert_after(bootstrap)
     # Updated local styles and scripts must not reuse an older cached asset.
     for node, attr in [(node, 'href') for node in page.select('link[rel="stylesheet"][href]')] + [(node, 'src') for node in page.select('script[src]')]:
         url = node[attr].split('?', 1)[0]

@@ -7,6 +7,47 @@ const origin = process.env.BLOG_URL || 'http://127.0.0.1:5176'
 const browser = await chromium.launch({ channel: 'msedge', headless: true, ignoreDefaultArgs: ['--hide-scrollbars'] })
 await mkdir('qa', { recursive: true })
 try {
+  // Hold the enhancement script to inspect the first painted page on a cold load.
+  for (const path of ['/', '/2026/10/01/harness-architecture/']) {
+    const cold = await browser.newPage({ viewport: { width: 1440, height: 900 } })
+    let release
+    const gate = new Promise(resolve => { release = resolve })
+    await cold.route('**/js/blog.js*', async route => {
+      await gate
+      await route.continue()
+    })
+    const navigation = cold.goto(origin + path, { waitUntil: 'load' })
+    try {
+      await cold.waitForSelector('#web_bg', { state: 'attached' })
+      await cold.waitForTimeout(400)
+      const firstPaint = await cold.evaluate(() => ({
+        gutter: innerWidth - document.documentElement.clientWidth,
+        background: document.getElementById('web_bg').getBoundingClientRect().right,
+        viewport: innerWidth,
+        initialized: !!document.querySelector('.page-scrollbar')
+      }))
+      assert.equal(firstPaint.initialized, false, 'the main script must still be delayed')
+      assert.equal(firstPaint.gutter, 0, 'a cold load must not flash the native gutter')
+      assert.equal(firstPaint.background, firstPaint.viewport)
+      await cold.screenshot({ path: `qa/scrollbar-first-paint-${path === '/' ? 'home' : 'article'}.png` })
+      console.log('First paint with blog.js delayed:', path, firstPaint)
+    } finally {
+      release()
+      await navigation
+    }
+    await cold.waitForSelector('.page-scrollbar', { state: 'visible' })
+    assert.equal(await cold.evaluate(() => innerWidth - document.documentElement.clientWidth), 0)
+    await cold.close()
+  }
+  const failed = await browser.newPage()
+  await failed.route('**/js/blog.js*', route => route.abort())
+  await failed.goto(origin + '/')
+  assert.equal(await failed.locator('html').evaluate(e => e.classList.contains('overlay-scrollbar')), false,
+    'a failed enhancement script must restore the native scrollbar')
+  await failed.mouse.wheel(0, 500)
+  await failed.waitForTimeout(200)
+  assert.ok(await failed.evaluate(() => scrollY > 0))
+  await failed.close()
   const page = await browser.newPage({ viewport: { width: 1440, height: 900 } })
   const errors = []
   page.on('pageerror', error => errors.push(error.message))
@@ -88,7 +129,7 @@ try {
   const noJS = await browser.newPage({ javaScriptEnabled: false })
   await noJS.goto(origin + '/')
   assert.notEqual(await noJS.locator('html').evaluate(e => getComputedStyle(e).scrollbarWidth), 'none')
-  console.log('PASS: transparent overlay in both themes; wheel, drag, track, keyboard, TOC, resize and native fallbacks')
+  console.log('PASS: no first-paint gutter on cold home/article loads; failed-script fallback; transparent overlay in both themes; wheel, drag, track, keyboard, TOC, resize and native fallbacks')
 } finally {
   await browser.close()
 }
