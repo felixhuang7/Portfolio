@@ -44,6 +44,8 @@ try {
       await page.evaluate(() => document.fonts.ready)
       await page.evaluate(async () => {
         for (const image of document.images) {
+          // The focused loading check tests scroll-triggered requests separately.
+          if (image.dataset.src) image.src = image.dataset.src
           image.loading = 'eager'
           await image.decode().catch(() => {})
         }
@@ -176,7 +178,7 @@ try {
       if (path === '/comments/') {
         assert.equal(await page.locator('.guestbook-contact').getAttribute('href'), 'mailto:1677518554@qq.com?subject=%E5%8D%9A%E5%AE%A2%E7%95%99%E8%A8%80')
         await page.locator('.guestbook-contact').scrollIntoViewIfNeeded()
-        assert.equal(await page.locator('#article-container img[src="/img/favicon.png"]').count(), 0)
+        assert.equal(await page.locator('#article-container img[src^="/img/favicon.png"]').count(), 0)
       }
       if (path === '/link/') {
         assert.equal(await page.locator('.flink-list-item > a').count(), 2)

@@ -60,6 +60,31 @@ def optimize_image(source, target, width, quality=84):
             image.save(target, 'WEBP', quality=quality, method=6)
 
 
+def versioned(url):
+    path = url.split('?', 1)[0]
+    asset = ROOT / path.lstrip('/')
+    if path.startswith(('/css/', '/js/', '/img/', '/vendor/')) and asset.is_file():
+        data = asset.read_bytes() if asset.suffix not in ('.css', '.js') else asset.read_text(encoding='utf-8').encode('utf-8')
+        return f'{path}?v={hashlib.sha256(data).hexdigest()[:12]}'
+    return url
+
+
+def version_css_assets():
+    # Font/background requests also need new URLs when their contents change.
+    for css in [ROOT / 'css/index.css', ROOT / 'css/custom.css', ROOT / 'vendor/fontawesome/css/all.min.css']:
+        def replace(match):
+            url = match.group(1).strip('"\'')
+            if url.startswith(('data:', 'http:', 'https:', '//')):
+                return match.group(0)
+            path = url.split('?', 1)[0]
+            asset = ((ROOT / path.lstrip('/')) if path.startswith('/') else (css.parent / path)).resolve()
+            if not asset.is_file() or not asset.is_relative_to(ROOT):
+                return match.group(0)
+            version = versioned('/' + asset.relative_to(ROOT).as_posix()).split('?', 1)[1]
+            return f'url({path}?{version})'
+        write(css, re.sub(r'url\(([^)]+)\)', replace, css.read_text(encoding='utf-8')))
+
+
 def common(page):
     # Keep the theme and its core interactions; drop duplicate animation injectors,
     # CDN plugins, counters and the overlay that waited for window.load.
@@ -204,13 +229,30 @@ def output(page, path):
   }
 })();"""
     page.head.select_one('meta[charset]').insert_after(bootstrap)
-    # Updated local styles and scripts must not reuse an older cached asset.
-    for node, attr in [(node, 'href') for node in page.select('link[rel="stylesheet"][href]')] + [(node, 'src') for node in page.select('script[src]')]:
-        url = node[attr].split('?', 1)[0]
-        if url.startswith(('/css/', '/js/')):
-            asset = ROOT / url.lstrip('/')
-            version = hashlib.sha256(asset.read_text(encoding='utf-8').encode('utf-8')).hexdigest()[:12]
-            node[attr] = f'{url}?v={version}'
+    # Discover the shared hero image before waiting for the stylesheets.
+    page.head.append(page.new_tag('link', rel='preload', attrs={'as': 'image', 'href': '/img/background.webp', 'fetchpriority': 'high'}))
+    # Version every cached resource, including icons and images.
+    for node, attr in [(node, 'href') for node in page.select('link[href]')] + [(node, 'src') for node in page.select('script[src], img[src]')]:
+        node[attr] = versioned(node[attr])
+    for image in list(page.select('#article-container img[src^="/img/posts/"], #article-container img[src^="/img/diagrams/"], .recent-post-item img')):
+        if image['src'].split('?', 1)[0].endswith('.svg'):
+            svg = ET.parse(ROOT / image['src'].split('?', 1)[0].lstrip('/')).getroot()
+            if svg.get('viewBox'):
+                _, _, width, height = svg.get('viewBox').split()
+                image['width'], image['height'] = width, height
+        fallback = page.new_tag('noscript')
+        fallback.append(deepcopy(image))
+        image.insert_after(fallback)
+        image['data-src'] = image['src']
+        image['src'] = 'data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs='
+        if image.get('width') and image.get('height'):
+            image['style'] = image.get('style', '') + f';aspect-ratio:{image["width"]}/{image["height"]}'
+        # The observer controls the distance; do not add the browser's own delay.
+        image['loading'] = 'eager'
+    page.head.append(fragment('<noscript><style>img[data-src] { display: none !important; }</style></noscript>').noscript)
+    loader = page.new_tag('script', id='page-loading')
+    loader.string = (ROOT / 'js/loading.js').read_text(encoding='utf-8')
+    page.body.append(loader)
     # root-relative paths support both a dedicated blog and /blog beside Portfolio.
     if BASE != '/':
         for node in page.select('[href], [src]'):
@@ -239,7 +281,7 @@ def main():
     global SITE, BASE, OUT
     parser = argparse.ArgumentParser()
     parser.add_argument('--base', default='/')
-    parser.add_argument('--site', default='https://felixhuang7.dpdns.org')
+    parser.add_argument('--site', default='https://blog.felixhuang7.dpdns.org')
     parser.add_argument('--out', default=str(ROOT))
     args = parser.parse_args()
     BASE, SITE, OUT = args.base, args.site.rstrip('/'), Path(args.out)
@@ -261,6 +303,7 @@ def main():
             from PIL import ImageOps
             ImageOps.fit(im, (560, 350)).save(article_assets / (p['cover'] + '-thumb.webp'), 'WEBP', quality=84, method=6)
 
+    version_css_assets()
     if not (TEMPLATES / 'home.html').exists():
         originals = {'home': ROOT / 'index.html', 'page': ROOT / 'about/index.html',
                      'post': ROOT / '2022/12/21/测试用/index.html'}

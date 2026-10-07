@@ -146,7 +146,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let link = img.closest('a')
     if (!link) {
       link = document.createElement('a')
-      link.href = img.src
+      link.href = img.dataset.src || img.src
       img.replaceWith(link)
       link.append(img)
     }
