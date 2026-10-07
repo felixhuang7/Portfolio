@@ -5,6 +5,21 @@ import { readFile } from 'node:fs/promises'
 const origin = process.env.BLOG_URL || 'http://127.0.0.1:5176'
 const browser = await chromium.launch({ channel: 'msedge', headless: true })
 try {
+  // Exercise the real scheduler as well as the paused background-phase check.
+  for (const path of ['/', '/2026/10/01/harness-architecture/']) {
+    const automatic = await browser.newPage({ viewport: { width: 1440, height: 900 } })
+    await automatic.goto(origin + path)
+    await automatic.waitForFunction(() => [...document.images].every(image => !image.dataset.src && image.naturalWidth > 1))
+    const timing = await automatic.evaluate(() => ({
+      paint: performance.getEntriesByType('paint').find(entry => entry.name === 'first-contentful-paint')?.startTime,
+      image: Math.min(...performance.getEntriesByType('resource').filter(entry => /\/img\//.test(entry.name) && !/favicon|%E6%88%BF/.test(entry.name)).map(entry => entry.startTime)),
+      scroll: scrollY
+    }))
+    assert.ok(timing.paint > 0 && timing.image >= timing.paint, 'real image requests must follow the actual content paint')
+    assert.equal(timing.scroll, 0)
+    console.log('Automatic background loading:', path, timing)
+    await automatic.close()
+  }
   const page = await browser.newPage({ viewport: { width: 1440, height: 900 } })
   // Pause the background phase so the already painted content can be inspected.
   await page.addInitScript(() => {

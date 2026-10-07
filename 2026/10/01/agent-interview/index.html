@@ -763,10 +763,21 @@
     }
     for (let i = 0; i < 3; i++) worker()
   }
-  requestAnimationFrame(() => requestAnimationFrame(() => {
+  const scheduleImages = () => {
     if ('requestIdleCallback' in window) requestIdleCallback(startImages, { timeout: 300 })
     else setTimeout(startImages, 0)
-  }))
+  }
+  if (performance.getEntriesByType('paint').some(entry => entry.name === 'first-contentful-paint')) {
+    scheduleImages()
+  } else if (window.PerformanceObserver?.supportedEntryTypes.includes('paint')) {
+    // Animation frames may run before text is actually painted; wait for FCP.
+    const painted = new PerformanceObserver(list => {
+      if (!list.getEntries().some(entry => entry.name === 'first-contentful-paint')) return
+      painted.disconnect()
+      scheduleImages()
+    })
+    painted.observe({ type: 'paint', buffered: true })
+  } else requestAnimationFrame(() => requestAnimationFrame(scheduleImages))
 
   // Prepare only a link the visitor shows interest in; leave navigation native.
   const connection = navigator.connection
