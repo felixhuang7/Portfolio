@@ -255,8 +255,8 @@ def output(page, path):
     page.body.append(loader)
     # root-relative paths support both a dedicated blog and /blog beside Portfolio.
     if BASE != '/':
-        for node in page.select('[href], [src]'):
-            for attr in ['href', 'src']:
+        for node in page.select('[href], [src], [data-src]'):
+            for attr in ['href', 'src', 'data-src']:
                 value = node.get(attr, '')
                 if value.startswith('/') and not value.startswith('//'):
                     node[attr] = BASE.rstrip('/') + value
